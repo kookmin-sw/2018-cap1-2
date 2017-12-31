@@ -11,10 +11,12 @@ public class Rule {
 	
 	public Rule() {
 		typeTable.add("for");
+		typeTable.add("print");
 	}
 	
 	public boolean match(String code, String codeLine) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 		if(typeTable.contains(code) == false) return false;
+		
 		try {
 			Type type = new Dao().getType(code);
 			String converted = type.convert(codeLine);
@@ -22,6 +24,7 @@ public class Rule {
 			Saver.save("./Converted/converted.java", converted);
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		}
 		return true;
 	}

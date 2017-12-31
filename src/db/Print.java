@@ -6,16 +6,14 @@ import java.util.stream.Collectors;
 
 import common.Pair;
 
-public class For extends Type{
+public class Print extends Type {
 	
-	public For() {
-		typeName = "for";
-		originalFormat = "for(int ?=?;?<=?;?++)";
-		addMatchedFormat(".*(for)\\([a-zA-Z]+=\\w+~\\w+\\).*", "(for\\()|=|~|\\)");	// for(i = 0 ~ N)
-		addMatchedFormat(".*(for)\\([a-zA-Z]+=\\w+->\\w+\\).*", "(for\\()|=|->|\\)");	// for(i = 0 -> N)
-		addMatchedFormat(".*(for)\\([a-zA-Z]+->\\w+:\\w+\\).*", "(for\\()|->|:|\\)");// for(i -> 0 : N)
+	public Print() {
+		typeName = "print";
+		originalFormat = "System.out.print(?);";
+		addMatchedFormat(".*(print\\().*\\).*", "(print\\()|\\)");	// print(i)
 	}
-	
+
 	@Override
 	public String convert(String psuedoLine) {
 		String lines = psuedoLine.replaceAll(" ", "");
@@ -32,11 +30,9 @@ public class For extends Type{
 			
 			/*
 			 * vars[0] = i
-			 * vars[1] = 0
-			 * vars[2] = N
 			 */
-			int endOfVarIdx = 2;
-			int i, j, len = originalFormat.length(), seq[] = {0, 1, 0, 2, 0};
+			int endOfVarIdx = 0;
+			int i, j, len = originalFormat.length(), seq[] = {0};
 			char ch;
 			for(i=j=0;i<len;i++) {
 				ch = originalFormat.charAt(i);
@@ -51,5 +47,5 @@ public class For extends Type{
 		
 		return converted.toString();
 	}
-
+	
 }

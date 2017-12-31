@@ -17,11 +17,13 @@ public class Main {
 		
 		Rule rule = new Rule();
 		
-		System.out.println("Pseudo 코드");
+		System.out.println("[ Pseudo 코드] ");
 		Arrays.stream(rawCodes).forEach(System.out::println);
 		
-		System.out.println("변환 시작");
+		System.out.print("\n<< 변환 시작 ... ");
 		for(String pseudoLine : rawCodes) {
+			pseudoLine = pseudoLine.replaceAll(" |\\t", "");
+			
 			boolean matched = false;
 			for(int i=0;i<pseudoLine.length();i++) {
 				matched = rule.match(pseudoLine.substring(0, i), pseudoLine);
@@ -29,8 +31,9 @@ public class Main {
 			}
 			if(matched == false) rule.forceMatch(pseudoLine+"\n");
 		}
-		System.out.println("변환 완료\n");
+		System.out.println("완료 >>\n");
 		
+		System.out.println("[ Java 코드 ]");
 		String converteds[] = Loader.load(convertedPath).split("\n");
 		Arrays.stream(converteds).forEach(System.out::println);
 	}
