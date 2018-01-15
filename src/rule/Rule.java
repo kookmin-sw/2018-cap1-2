@@ -8,10 +8,12 @@ import io.Saver;
 
 public class Rule {
 	private volatile HashSet<String> typeTable = new HashSet<>();
+	private String savePath;
 	
-	public Rule() {
+	public Rule(String savePath) {
 		typeTable.add("for");
 		typeTable.add("print");
+		this.savePath = savePath;
 	}
 	
 	public boolean match(String code, String codeLine) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
@@ -21,7 +23,7 @@ public class Rule {
 			Type type = new Dao().getType(code);
 			String converted = type.convert(codeLine);
 			
-			Saver.save("./Converted/converted.java", converted);
+			Saver.save(savePath, converted);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
@@ -30,6 +32,6 @@ public class Rule {
 	}
 	
 	public void forceMatch(String codeLine) throws Exception {
-		Saver.save("./Converted/converted.java", codeLine);
+		Saver.save(savePath, codeLine);
 	}
 }
