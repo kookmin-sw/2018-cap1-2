@@ -36,8 +36,9 @@ public class Worker extends Thread {
 		new File(TXT_DIR).mkdirs();
 		
 		System.out.println("===== Client Info =====");
-		System.out.println("Date: "+new SimpleDateFormat("YYYY-MM-DD_HH:mm:ss").format(new Date()));
+		System.out.println("Date: "+new SimpleDateFormat("YYYY-MM-dd_HH:mm:ss").format(new Date()));
 		System.out.println("ip: "+inetAddress);
+		System.out.println();
 	}
 	
 	@Override
