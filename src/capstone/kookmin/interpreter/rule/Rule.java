@@ -35,6 +35,7 @@ public class Rule {
 	 * @throws IllegalAccessException
 	 */
 	public boolean match(String code, String codeLine) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+		code = code.replaceAll(" |\\t", ""); //공백, tab 문자 제거
 		if(typeTable.contains(code) == false) return false; //예약어가 없을 시 false 리턴
 		
 		try {
@@ -64,7 +65,7 @@ public class Rule {
 	 */
 	private void updateTable() {
 		Arrays.stream(new File("src/capstone/kookmin/interpreter/db").listFiles())
-			.map(f-> f.getName())
+			.map(f-> f.getName().toLowerCase()) //소문자로
 			.map(name-> name.substring(0, name.indexOf(".java")))
 			.filter(name-> !name.contains("Type") && !name.contains("Dao")) //Type, Dao는 제외
 			.forEach(name-> typeTable.add(name));

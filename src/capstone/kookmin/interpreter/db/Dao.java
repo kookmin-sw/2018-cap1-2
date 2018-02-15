@@ -15,7 +15,7 @@ public class Dao {
 	 * @throws IllegalAccessException
 	 */
 	public Type getType(String typeName) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-		String name = "db."+toClassName(typeName);
+		String name = "capstone.kookmin.interpreter.db."+toClassName(typeName);
 		Type type = (Type) Class.forName(name).newInstance(); //객체 생성
 		return type;
 	}

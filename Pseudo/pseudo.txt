@@ -3,7 +3,7 @@ for(i = 0 ~ N) { // First example
 }
 
 for(j = 0 -> M) { // Second example
-	print(j)
+	println(j)
 }
 
 for(k -> 0 : N) { // Third example

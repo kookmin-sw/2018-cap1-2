@@ -19,7 +19,7 @@ public class Print extends Type {
 
 	@Override
 	public String convert(String psuedoLine) {
-		String lines = psuedoLine.replaceAll(" ", "");
+		String lines = psuedoLine.replaceAll(" |\\t", "");
 		StringBuilder converted = new StringBuilder(originalFormat.length());
 		
 		for(Pair<String, String> each : matchedFormat) {

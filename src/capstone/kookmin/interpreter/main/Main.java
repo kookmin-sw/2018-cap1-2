@@ -8,11 +8,13 @@ import capstone.kookmin.interpreter.rule.Rule;
 
 public class Main {
 	public static void main(String[] args) throws Exception {
-		if(args.length !=2) {
-			System.err.println("Usage: <Input> <Output>");
-			System.err.println("ex) pseudo_dir/pseudo.txt output_dir/converted.java");
-			System.exit(2);
-		}
+//		if(args.length !=2) {
+//			System.err.println("Usage: <Input> <Output>");
+//			System.err.println("ex) pseudo_dir/pseudo.txt output_dir/converted.java");
+//			System.exit(2);
+//		}
+		
+		args = new String[] { "Pseudo/pseudo.txt", "Converted/converted.java" };
 
 		String rawPath = args[0];
 		String rawCodes[] = Loader.load(rawPath).split("\n");
@@ -31,8 +33,6 @@ public class Main {
 		
 		System.out.print("\n변환 시작 ... ");
 		for(String pseudoLine : rawCodes) {
-			pseudoLine = pseudoLine.replaceAll(" |\\t", "");
-			
 			boolean matched = false;
 			for(int i=0;i<pseudoLine.length();i++) {
 				matched = rule.match(pseudoLine.substring(0, i), pseudoLine);
