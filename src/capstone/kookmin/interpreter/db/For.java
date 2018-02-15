@@ -6,10 +6,13 @@ import java.util.stream.Collectors;
 
 import capstone.kookmin.interpreter.common.Pair;
 
+/**
+ * For 예약어 매칭
+ * @author occidere
+ */
 public class For extends Type{
 	
 	public For() {
-		typeName = "for";
 		originalFormat = "for(int ?=?;?<=?;?++)";
 		addMatchedFormat(".*(for)\\([a-zA-Z]+=\\w+~\\w+\\).*", "(for\\()|=|~|\\)");	// for(i = 0 ~ N)
 		addMatchedFormat(".*(for)\\([a-zA-Z]+=\\w+->\\w+\\).*", "(for\\()|=|->|\\)");	// for(i = 0 -> N)

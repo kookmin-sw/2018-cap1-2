@@ -6,10 +6,13 @@ import java.util.stream.Collectors;
 
 import capstone.kookmin.interpreter.common.Pair;
 
+/**
+ * print 예약어 매칭
+ * @author occidere
+ */
 public class Print extends Type {
 	
 	public Print() {
-		typeName = "print";
 		originalFormat = "System.out.print(?);";
 		addMatchedFormat(".*(print\\().*\\).*", "(print\\()|\\)");	// print(i)
 	}
