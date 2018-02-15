@@ -18,8 +18,8 @@ public abstract class Type {
 	
 	/**
 	 * 매칭 포맷 추가
-	 * @param pseudo 수도 코드
-	 * @param preserved 예약어
+	 * @param pseudo 수도 코드와 매칭시킬 정규식 (변수 등이 포함)
+	 * @param preserved 변수 등이 포함되지 않은 정규식
 	 */
 	protected void addMatchedFormat(String pseudo, String preserved) {
 		matchedFormat.add(new Pair<String, String>(pseudo, preserved));
