@@ -1,10 +1,10 @@
-package rule;
+package capstone.kookmin.interpreter.rule;
 
 import java.util.HashSet;
 
-import db.Dao;
-import db.Type;
-import io.Saver;
+import capstone.kookmin.interpreter.db.Dao;
+import capstone.kookmin.interpreter.db.Type;
+import capstone.kookmin.interpreter.io.Saver;
 
 public class Rule {
 	private volatile HashSet<String> typeTable = new HashSet<>();

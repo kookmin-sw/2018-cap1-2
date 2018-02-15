@@ -1,4 +1,4 @@
-package db;
+package capstone.kookmin.interpreter.db;
 
 public class Dao {
 	public Type getType(String typeName) throws ClassNotFoundException, InstantiationException, IllegalAccessException {

@@ -1,4 +1,4 @@
-package common;
+package capstone.kookmin.interpreter.common;
 
 public class Pair <T, U> {
 	public T format;

@@ -1,9 +1,9 @@
-package db;
+package capstone.kookmin.interpreter.db;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import common.Pair;
+import capstone.kookmin.interpreter.common.Pair;
 
 public abstract class Type {
 	protected String typeName;

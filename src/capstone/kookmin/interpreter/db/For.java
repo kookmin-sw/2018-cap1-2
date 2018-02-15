@@ -1,19 +1,21 @@
-package db;
+package capstone.kookmin.interpreter.db;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import common.Pair;
+import capstone.kookmin.interpreter.common.Pair;
 
-public class Print extends Type {
+public class For extends Type{
 	
-	public Print() {
-		typeName = "print";
-		originalFormat = "System.out.print(?);";
-		addMatchedFormat(".*(print\\().*\\).*", "(print\\()|\\)");	// print(i)
+	public For() {
+		typeName = "for";
+		originalFormat = "for(int ?=?;?<=?;?++)";
+		addMatchedFormat(".*(for)\\([a-zA-Z]+=\\w+~\\w+\\).*", "(for\\()|=|~|\\)");	// for(i = 0 ~ N)
+		addMatchedFormat(".*(for)\\([a-zA-Z]+=\\w+->\\w+\\).*", "(for\\()|=|->|\\)");	// for(i = 0 -> N)
+		addMatchedFormat(".*(for)\\([a-zA-Z]+->\\w+:\\w+\\).*", "(for\\()|->|:|\\)");// for(i -> 0 : N)
 	}
-
+	
 	@Override
 	public String convert(String psuedoLine) {
 		String lines = psuedoLine.replaceAll(" ", "");
@@ -30,9 +32,11 @@ public class Print extends Type {
 			
 			/*
 			 * vars[0] = i
+			 * vars[1] = 0
+			 * vars[2] = N
 			 */
-			int endOfVarIdx = 0;
-			int i, j, len = originalFormat.length(), seq[] = {0};
+			int endOfVarIdx = 2;
+			int i, j, len = originalFormat.length(), seq[] = {0, 1, 0, 2, 0};
 			char ch;
 			for(i=j=0;i<len;i++) {
 				ch = originalFormat.charAt(i);
@@ -47,5 +51,5 @@ public class Print extends Type {
 		
 		return converted.toString();
 	}
-	
+
 }

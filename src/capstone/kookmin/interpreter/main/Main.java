@@ -1,14 +1,13 @@
-package main;
+package capstone.kookmin.interpreter.main;
 
 import java.io.File;
 import java.util.Arrays;
 
-import io.Loader;
-import rule.Rule;
+import capstone.kookmin.interpreter.io.Loader;
+import capstone.kookmin.interpreter.rule.Rule;
 
 public class Main {
 	public static void main(String[] args) throws Exception {
-		
 		if(args.length !=2) {
 			System.err.println("Usage: <Input> <Output>");
 			System.err.println("ex) pseudo_dir/pseudo.txt output_dir/converted.java");

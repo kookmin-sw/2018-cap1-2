@@ -1,6 +1,6 @@
-package parse;
+package capstone.kookmin.interpreter.parse;
 
-import common.ParsingType;
+import capstone.kookmin.interpreter.common.ParsingType;
 
 public class Parser {
 	public boolean parse(String filePath, ParsingType type) {
