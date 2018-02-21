@@ -43,8 +43,7 @@ public class Print extends Type {
 			}
 
 			for(i=endOfVarIdx+1; i<vars.length;i++) converted.append(vars[i]);
-			
-			converted.append("\n");
+
 			break;
 		}
 		

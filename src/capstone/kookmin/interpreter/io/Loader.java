@@ -9,6 +9,9 @@ import java.io.IOException;
  * @author occidere
  */
 public class Loader {
+	
+	private Loader() {}
+	
 	/**
 	 * path의 파일을 읽어들이는 메서드
 	 * @param path 읽어들일 파일의 경로

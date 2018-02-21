@@ -21,7 +21,7 @@ public class For extends Type{
 	
 	@Override
 	public String convert(String psuedoLine) {
-		String lines = psuedoLine.replaceAll(" ", "");
+		String lines = psuedoLine.replaceAll(" |\\t", "");
 		StringBuilder converted = new StringBuilder(originalFormat.length());
 		
 		for(Pair<String, String> each : matchedFormat) {
@@ -48,7 +48,6 @@ public class For extends Type{
 
 			for(i=endOfVarIdx+1; i<vars.length;i++) converted.append(vars[i]);
 			
-			converted.append("\n");
 			break;
 		}
 		

@@ -11,7 +11,8 @@ import java.io.PrintWriter;
  */
 public class Saver {
 	
-	@SuppressWarnings("unused")
+	private Saver() {}
+	
 	/**
 	 * 파일을 저장하는 메서드
 	 * @param path 저장할 파일의 경로

@@ -45,7 +45,6 @@ public class Println extends Type {
 			// 나머지 부분들 이어붙여주기
 			for(i=endOfVarIdx+1; i<vars.length; i++) converted.append(vars[i]);
 			
-			converted.append("\n");
 			break; //매칭 & 변환 성공 시 종료
 		}
 		
