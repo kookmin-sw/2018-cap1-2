@@ -54,6 +54,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        setTheme(R.style.AppTheme);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -102,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 makePictureFile());
 
         intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-        startActivityForResult(intent, 3);
+        startActivityForResult(intent, 1);
     }
 
     /**
@@ -136,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void choosePhoto(){
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-        startActivityForResult(intent, 3);
+        startActivityForResult(intent, 2);
         Log.d(TAG," select photo in the gallery");
     }
 
@@ -153,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 이미지 범위 조정 - 수정필요
      */
     private void cropImage(){
+        Log.d("MainActivity","photoURI : " + photoURI);
         this.grantUriPermission("com.android.camera", photoURI,
                 Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
         Intent intent = new Intent("com.android.camera.action.CROP");
@@ -178,8 +182,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             File folder = new File(Environment.getExternalStorageDirectory() + "/test/");
             File tempFile = new File(folder.toString(), croppedFileName.getName());
 
-            photoURI = FileProvider.getUriForFile(this,
-                    "com.example.test.provider", tempFile);
+            photoURI = FileProvider.getUriForFile(MainActivity.this,
+                    BuildConfig.APPLICATION_ID + ".provider",
+                    makePictureFile());
 
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
@@ -212,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //카메라에서 촬영
         if (requestCode == 1) {
-            //cropImage();
+            cropImage();
 
             // 찍힌 사진을 "갤러리" 앱에 추가
             Intent mediaScanIntent = new Intent( Intent.ACTION_MEDIA_SCANNER_SCAN_FILE );
