@@ -2,7 +2,7 @@
 
 국민대학교 소프트웨어학부 캡스톤 프로젝트 2조
 
-### 1. 프로잭트 소개
+### 1. 프로젝트 소개
 
 
 
@@ -29,6 +29,7 @@
 ### 5. 기타
 
 
+**markdown example**
 ```markdown example
 Syntax highlighted code block
 
