@@ -1,0 +1,11 @@
+for(i = 0 ~ N) { // First example
+	print(i)
+}
+
+for(j = 0 -> M) { // Second example
+	println(j)
+}
+
+for(k -> 0 : N) { // Third example
+	print(k)
+}
