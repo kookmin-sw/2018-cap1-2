@@ -33,7 +33,9 @@
 ````
 
 ## 이성준
-![profile](https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAMAAwDuAAgAAQAAAAAAAA9MAAAAJDcxMWQxNmY0LTAxNWItNDE4NS1hYTliLWZiZjAxYzJlMjE5ZA.bin)
+
+<img src="https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAMAAwDuAAgAAQAAAAAAAA9MAAAAJDcxMWQxNmY0LTAxNWItNDE4NS1hYTliLWZiZjAxYzJlMjE5ZA.bin" width="20%">
+
 ````
 * 학번: 20123087
 * 역할: Interpreter 개발, Server 개발, 예약어 사전 구축 & 매칭
