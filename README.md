@@ -2,25 +2,53 @@
 
 국민대학교 소프트웨어학부 캡스톤 프로젝트 2조
 
-### 1. 프로젝트 소개
+## 1. 프로젝트 소개
 
+추가예정
 
-
-### 2. 소개 영상
+## 2. 소개 영상
 
 프로젝트소개영상
 
-### 3. 팀 소개
+## 3. 팀 소개
 
 팀원 정보 및 담당, 사진 및 SNS이용
 
-신종혁(팀장) : 
+## 신종혁(팀장)
+![사진이름](사진경로)
+````
+* 학번: 
+* 역할: 
+* Email: 
+* Homepage: 
+````
 
-박세용 : 
+## 박세용
+![사진이름](사진경로)
+````
+* 학번: 
+* 역할: 
+* Email: 
+* Homepage: 
+````
 
-이성준 : 
+## 이성준
+![profile](https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAMAAwDuAAgAAQAAAAAAAA9MAAAAJDcxMWQxNmY0LTAxNWItNDE4NS1hYTliLWZiZjAxYzJlMjE5ZA.bin)
+````
+* 학번: 20123087
+* 역할: Interpreter 개발, Server 개발, 예약어 사전 구축 & 매칭
+* Email: occidere@naver.com
+* Homepage: https://blog.naver.com/occidere
+````
 
-최인정 : 
+## 최인정
+![사진이름](사진경로)
+````
+* 학번: 
+* 역할: 
+* Email: 
+* Homepage: 
+````
 
 ### 4. 사용법
 
