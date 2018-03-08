@@ -18,7 +18,7 @@ public class Println extends Type {
 	}
 
 	@Override
-	public String convert(String psuedoLine) {
+	public String convert(String pseudoLine) {
 		String lines = psuedoLine.replaceAll(" |\\t", ""); //공백 제거
 		StringBuilder converted = new StringBuilder();
 		

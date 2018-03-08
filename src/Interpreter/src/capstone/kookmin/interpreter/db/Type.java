@@ -30,5 +30,5 @@ public abstract class Type {
 	 * @param psuedoLine 수도 코드 라인
 	 * @return 수도코드가 변환된 정식 문법 문장
 	 */
-	public abstract String convert(String psuedoLine);
+	public abstract String convert(String pseudoLine);
 }

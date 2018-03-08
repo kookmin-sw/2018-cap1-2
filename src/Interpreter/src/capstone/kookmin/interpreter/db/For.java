@@ -20,7 +20,7 @@ public class For extends Type{
 	}
 	
 	@Override
-	public String convert(String psuedoLine) {
+	public String convert(String pseudoLine) {
 		String lines = psuedoLine.replaceAll(" |\\t", "");
 		StringBuilder converted = new StringBuilder(originalFormat.length());
 		
