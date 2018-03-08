@@ -15,12 +15,12 @@
 팀원 정보 및 담당, 사진 및 SNS이용
 
 ## 신종혁(팀장)
-![사진이름](사진경로)
+<img src=./doc/pic/sjhyeok.jpg width="20%" height="20%">
 ````
-* 학번: 
-* 역할: 
-* Email: 
-* Homepage: 
+* 학번: 20132889
+* 역할: 영상처리 및 텍스트 추출, 영상처리관련 모듈 개발, 팀장
+* Email: shinjong9312@gmail.com
+* Homepage: https://blog.naver.com/shinjong9312
 ````
 
 ## 박세용
@@ -48,10 +48,10 @@
 ## 최인정
 ![사진이름](사진경로)
 ````
-* 학번: 
-* 역할: 
-* Email: 
-* Homepage: 
+* 학번:
+* 역할:
+* Email:
+* Homepage:
 ````
 
 ### 4. 사용법
