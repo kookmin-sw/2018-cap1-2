@@ -24,7 +24,7 @@
 ````
 
 ## 박세용
-![로그인화면](./docs/pic/sypark) 
+![사진](./docs/pic/sypark.jpg) 
 ````
 * 학번: 20123043
 * 역할: Interpreter 개발, 예약어 사전 구축 & 매칭, 공유 모듈 개발
