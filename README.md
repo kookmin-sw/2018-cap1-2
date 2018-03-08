@@ -26,10 +26,10 @@
 ## 박세용
 ![사진이름](사진경로)
 ````
-* 학번: 
-* 역할: 
-* Email: 
-* Homepage: 
+* 학번: 20123043
+* 역할: Interpreter 개발, 예약어 사전 구축 & 매칭, 공유 모듈 개발
+* Email: marching0531@naver.com
+* Homepage: https://blog.naver.com/marching0531
 ````
 
 ## 이성준
