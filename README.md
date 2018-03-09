@@ -7,8 +7,7 @@
 추가예정
 
 ## 2. 소개 영상
-
-프로젝트소개영상
+[![image](doc/pic/youtube_thumbnail.JPG)](https://www.youtube.com/watch?v=lW8TSarABVc)
 
 ## 3. 팀 소개
 
