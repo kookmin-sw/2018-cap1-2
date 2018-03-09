@@ -8,7 +8,7 @@
 
 ### BluePrint
 
-<img src=./doc/pic/blueprint.jpg width="30%" height="30%">
+<img src=./doc/pic/blueprint.jpg width="80%" height="80%">
 
 ### 개발 파트와 Tools
 
