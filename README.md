@@ -48,7 +48,8 @@
 ````
 
 ## 최인정
-<img src=./doc/pic/ijchoi.jpg width="20%" height="20%">
+<img src=./doc/pic/inchoi.jpg width="20%" height="20%">
+
 ````
 * 학번:20142773
 * 역할:Android App 개발, 공유 plug-in
