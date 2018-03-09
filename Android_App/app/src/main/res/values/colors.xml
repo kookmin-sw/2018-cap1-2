@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="coway_background">#f7f7ed</color>
+    <color name="coway_main">#51a599</color>
+    <color name="coway_point">#3f847a</color>
+    <color name="white">#ffffff</color>
+</resources>
