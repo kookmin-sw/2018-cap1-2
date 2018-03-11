@@ -21,7 +21,7 @@ public class For extends Type{
 	
 	@Override
 	public String convert(String pseudoLine) {
-		String lines = psuedoLine.replaceAll(" |\\t", "");
+		String lines = pseudoLine.replaceAll(" |\\t", "");
 		StringBuilder converted = new StringBuilder(originalFormat.length());
 		
 		for(Pair<String, String> each : matchedFormat) {
