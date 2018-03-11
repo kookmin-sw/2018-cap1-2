@@ -1,5 +1,7 @@
 package capstone.kookmin.interpreter.db;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * 예약어에 맞는 Type 클래스를 가져오기 위한 Dao
  * @author occidere
@@ -15,7 +17,7 @@ public class Dao {
 	 * @throws IllegalAccessException
 	 */
 	public Type getType(String typeName) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-		String name = "capstone.kookmin.interpreter.db."+toClassName(typeName);
+		String name = "capstone.kookmin.interpreter.db." + toClassName(typeName);
 		Type type = (Type) Class.forName(name).newInstance(); //객체 생성
 		return type;
 	}
@@ -30,7 +32,6 @@ public class Dao {
 	 * @return Java Class Naming Convention에 맞게 변경된 예약어
 	 */
 	private String toClassName(String typeName) {
-		char capital = (char)(typeName.charAt(0) - 32);
-		return capital+typeName.substring(1, typeName.length());
+		return StringUtils.capitalize(typeName);
 	}
 }
