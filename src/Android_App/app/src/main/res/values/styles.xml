@@ -1,0 +1,16 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/coway_main</item>
+        <item name="colorPrimaryDark">@color/coway_point</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+    </style>
+
+    <style name="SplashTheme" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/splash</item>
+    </style>
+
+</resources>
