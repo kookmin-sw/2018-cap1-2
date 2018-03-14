@@ -1,27 +1,21 @@
 package capstone2018.coway;
 
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TimeFormatException;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.io.BufferedInputStream;
-import java.io.DataInput;
 import java.io.DataInputStream;
-import java.io.IOError;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InterruptedIOException;
 import java.net.Socket;
-import java.sql.ClientInfoStatus;
-
-import javax.xml.transform.Result;
 
 public class IndexActivity extends AppCompatActivity {
 
@@ -71,27 +65,26 @@ public class IndexActivity extends AppCompatActivity {
             Log.d(ClientTAG,"doInBackground()");
             setSocket();
 
-            while(isCancelled() == false && socket.isConnected()) {
-                Log.d(ClientTAG,"try to receive data");
+            while (isCancelled() == false && socket.isConnected()) {
+                Log.d(ClientTAG, "try to receive data");
                 try {
+                    socket.setSoTimeout(2000);
                     InputStream in = socket.getInputStream();
-
-                    while((cancel = in.read())!= -1) {
+                    while ((cancel = in.read()) != -1) {
                         Log.d(ClientTAG, "Client Thread start");
                         input = new DataInputStream(socket.getInputStream());
                         data = input.readUTF();
                     }
-
-                    if(cancel == -1){
+                    if (cancel == -1) {
                         Log.d(ClientTAG, "I/O Interrupt.");
                     }
-
                     Log.d(ClientTAG, "Input data : " + data);
-                } catch (IOException e){
-                        e.printStackTrace();
-                        return null;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
                 }
             }
+
             Log.d(ClientTAG, "socket is disconnected.");
             return null;
         }
@@ -103,7 +96,7 @@ public class IndexActivity extends AppCompatActivity {
             progressBar.setVisibility(View.INVISIBLE);
             if (TextUtils.isEmpty(data)) {
                 Log.d(TAG, "Nothing to be received");
-                Intent failIntent = new Intent(IndexActivity.this, FailResultActivity.class);
+                Intent failIntent = new Intent(IndexActivity.this, SystemErrorActivity.class);
                 startActivity(failIntent);
             } else {
                 Intent successIntent = new Intent(IndexActivity.this, SuccessResultActivity.class);

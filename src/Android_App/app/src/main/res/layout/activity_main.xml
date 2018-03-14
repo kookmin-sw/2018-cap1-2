@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -19,19 +19,21 @@
         <ImageView
             android:id="@+id/photoView"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:layout_margin="5sp"/>
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:layout_margin="@dimen/vertical_margin"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="178dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
             android:orientation="vertical">
 
             <Button
                 android:id="@+id/photoBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5sp"
+                android:layout_margin="@dimen/small_margin"
                 android:layout_weight="1"
                 android:background="@color/coway_main"
                 android:text="사진 촬영"
@@ -41,7 +43,7 @@
                 android:id="@+id/galleryBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5sp"
+                android:layout_margin="@dimen/small_margin"
                 android:layout_weight="1"
                 android:background="@color/coway_main"
                 android:text="사진첩에서 불러오기"
@@ -60,9 +62,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="전송"
-                tools:layout_editor_absoluteX="275dp" />
+ />
         </LinearLayout>
 
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>
