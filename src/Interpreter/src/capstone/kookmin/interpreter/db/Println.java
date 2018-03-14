@@ -19,7 +19,7 @@ public class Println extends Type {
 
 	@Override
 	public String convert(String pseudoLine) {
-		String lines = psuedoLine.replaceAll(" |\\t", ""); //공백 제거
+		String lines = pseudoLine.replaceAll(" |\\t", ""); //공백 제거
 		StringBuilder converted = new StringBuilder();
 		
 		for(Pair<String, String> each : matchedFormat) {
