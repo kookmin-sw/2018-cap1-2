@@ -1,10 +1,13 @@
 package capstone.kookmin.commons.protocol;
 
+import java.io.Serializable;
+
 /**
  * Coway Server와 통신하기 위한 표준 규격의 Packet 프로토콜 클래스
  * @author 이성준
  */
-public class Packet {
+public class Packet implements Serializable {
+	private static final long serialVersionUID = 332020868809166619L;
 	/***** Header *****/
 	/**
 	 * <li> 100: Success </li>
