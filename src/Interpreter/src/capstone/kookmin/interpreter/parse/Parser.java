@@ -7,7 +7,7 @@ import java.util.HashSet;
 
 import capstone.kookmin.interpreter.db.Dao;
 import capstone.kookmin.interpreter.db.Type;
-import capstone.kookmin.interpreter.io.Loader;
+import capstone.kookmin.commons.io.Loader;
 
 public class Parser {
 	private final Dao DAO = new Dao();
@@ -51,7 +51,7 @@ public class Parser {
 		StringBuilder converted = new StringBuilder();
 		
 		/* 파일 load 실패 시 IOException */
-		rawCodes = Loader.load(filePath).split("\n");
+		rawCodes = Loader.load(filePath);
 		
 		for(String line : rawCodes) {
 			try {
