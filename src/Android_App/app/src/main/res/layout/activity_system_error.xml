@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/coway_background"
+    tools:context="capstone2018.coway.SystemErrorActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:layout_weight="9">
+
+        <TextView
+            android:id="@+id/systemErrTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/system_error"
+            android:textSize="@dimen/text_size_large"/>
+
+        <TextView
+            android:id="@+id/systemErrComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginVertical="@dimen/vertical_margin"
+            android:text="@string/system_error_comment"
+            android:textSize="@dimen/text_size_medium"/>
+
+        <ImageView
+            android:id="@+id/errorImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/vertical_margin"
+            app:srcCompat="@drawable/warning" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/backBtn"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_gravity="bottom"
+        android:layout_weight="2"
+        android:text="돌아가기"
+        android:layout_marginBottom="@dimen/small_margin"/>
+</LinearLayout>

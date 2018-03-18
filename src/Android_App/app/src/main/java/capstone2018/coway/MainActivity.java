@@ -26,8 +26,6 @@ import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
@@ -104,6 +102,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 BuildConfig.APPLICATION_ID + ".provider",
                 makePictureFile());
 
+        Log.d(TAG ,"photoURI after taking a picture : " + photoURI );
+        Log.d(TAG," imagePath : " + imagePath);
+
         intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
         startActivityForResult(intent, 1);
     }
@@ -134,7 +135,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      *갤러리버튼 누르면 갤러리에서 사진 선택
-     * (crop 기능 미작동으로 추후 requestCode 수정 필요)
      */
     private void choosePhoto(){
         Intent intent = new Intent(Intent.ACTION_PICK);
@@ -147,16 +147,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * thread 생성
      */
     private void sendPhoto(){
-        ClientThread thread = new ClientThread();
-        thread.start();
-        Log.d(TAG, "Client Thread Start.");
+        if(photoURI != null) {
+            ClientThread thread = new ClientThread();
+            thread.start();
+            Log.d(TAG, "Client Thread Start.");
+        }
+        else{
+            Toast.makeText(this,"사진을 먼저 선택해주세요",Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
      * 이미지 범위 조정 - 수정필요
      */
     private void cropImage(){
-        Log.d("MainActivity","photoURI : " + photoURI);
+        Log.d(TAG,"photoURI : " + photoURI);
         this.grantUriPermission("com.android.camera", photoURI,
                 Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
         Intent intent = new Intent("com.android.camera.action.CROP");
@@ -173,8 +178,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             intent.putExtra("crop", "true");
-            intent.putExtra("aspectX", 4);
-            intent.putExtra("aspectY", 3);
+//            intent.putExtra("aspectX", 4);
+//            intent.putExtra("aspectY", 7);
             intent.putExtra("scale", true);
             File croppedFileName = null;
             croppedFileName = makePictureFile();
@@ -216,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         //카메라에서 촬영
-        if (requestCode == 1) {
+        if (requestCode == 1 ) {
             cropImage();
 
             // 찍힌 사진을 "갤러리" 앱에 추가
@@ -247,6 +252,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             factory.inJustDecodeBounds = false;
 
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath, factory);
+            Log.d(TAG,"bitmap : " + bitmap);
             imageByte = getBytesFromBitmap(bitmap);
             photoView.setImageBitmap(bitmap);
         }
@@ -328,10 +334,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     class ClientThread extends Thread {
         public void run(){
+            String ClientTAG = "Client Thread";
             String host = "49.236.144.45";
             int port = 13579;
             Boolean connected = true;
-            Log.d("Client Activity","Client Thread is working.");
+            Log.d(ClientTAG,"Client Thread is working.");
 
             try {
                 Socket socket = new Socket(host, port);
@@ -339,21 +346,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 while (connected) {
                     try {
                         OutputStream outputStream = socket.getOutputStream();
-                        Log.d("Client Activity", "Image Write.");
+                        Log.d(ClientTAG, "Image Write.");
                         outputStream.write(imageByte);
                         outputStream.close();
                         connected = false;
 
-                        Log.d("Client Activity", "Image sent.");
+                        Log.d(ClientTAG, "Image sent.");
+
+                        Intent intent = new Intent(MainActivity.this, IndexActivity.class);
+                        startActivity(intent);
+
+
                     } catch (Exception e) {
-                        Log.e("Client Activity", "Error", e);
+                        Log.e(ClientTAG, "Error", e);
                     }
                 }
                 socket.close();
-                Log.d("Client Activity","Closed.");
+                Log.d(ClientTAG,"Socket is Closed.");
             }
             catch (Exception e){
-                Log.e("Client Activity","Error",e);
+                Log.e(ClientTAG,"Error",e);
                 e.printStackTrace();
             }
         }
