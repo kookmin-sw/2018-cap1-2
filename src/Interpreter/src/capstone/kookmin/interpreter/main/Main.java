@@ -3,8 +3,8 @@ package capstone.kookmin.interpreter.main;
 import java.io.File;
 import java.util.Arrays;
 
-import capstone.kookmin.interpreter.io.Loader;
-import capstone.kookmin.interpreter.io.Saver;
+import capstone.kookmin.commons.io.Loader;
+import capstone.kookmin.commons.io.Saver;
 import capstone.kookmin.interpreter.parse.Parser;
 
 public class Main {
@@ -12,7 +12,7 @@ public class Main {
 		args = new String[] { "Pseudo/pseudo.txt", "Converted/converted.java" };
 
 		String rawPath = args[0];
-		String rawCodes[] = Loader.load(rawPath).split("\n");
+		String rawCodes[] = Loader.load(rawPath);
 
 		String convertPath = args[1];
 		int pos = Math.max(convertPath.lastIndexOf("/"), convertPath.lastIndexOf("\\"));
@@ -34,7 +34,7 @@ public class Main {
 		System.out.println("완료\n");
 		
 		System.out.println("[ Java 코드 ]");
-		String converteds[] = Loader.load(convertPath).split("\n");
+		String converteds[] = Loader.load(convertPath);
 		Arrays.stream(converteds).forEach(System.out::println);
 	}
 }
