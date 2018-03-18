@@ -10,6 +10,7 @@ public class Packet {
 	 * <li> 100: Success </li>
 	 * <li> 200: Logical Error </li>
 	 * <li> 300: System Error </li>
+	 * <li> 500: Image Send </li>
 	 */
 	private int statusCode;
 	private int errorLines[];
@@ -17,6 +18,7 @@ public class Packet {
 	/***** Body *****/
 	private String pseudoLines[];
 	private String javaLines[];
+	private byte images[];
 	
 	/**
 	 * System Error인 경우: statusCode 만 존재한다.
@@ -50,6 +52,16 @@ public class Packet {
 		this.javaLines = javaLines;
 	}
 	
+	/**
+	 * Android -> server로 image를 보내는 경우.
+	 * @param statusCode 상태코드(500)
+	 * @param images 수도코드 사진
+	 */
+	public Packet(int statusCode, byte[] images) {
+		this.statusCode = statusCode;
+		this.images = images;
+	}
+	
 	public int getStatusCode() {
 		return statusCode;
 	}
@@ -61,5 +73,8 @@ public class Packet {
 	}
 	public String[] getJavaLines() {
 		return javaLines;
+	}
+	public byte[] getImages() {
+		return images;
 	}
 }
