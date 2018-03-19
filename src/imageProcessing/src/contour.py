@@ -23,6 +23,10 @@ def isSame(bx, by, bw, bh, x, y, w, h):
     return result
 
 
+def new_sort(ax, ay):
+    return (ax + 100 * ay)
+
+
 def sort_contours(cnts, method="left-to-right"):
     reverse = False
     i = 0
@@ -37,11 +41,22 @@ def sort_contours(cnts, method="left-to-right"):
 
     # construct the list of boxes and sort
     boundingBoxes = [cv2.boundingRect(c) for c in cnts]
-    (cnts, boundingBoxes) = zip(*sorted(zip(cnts,boundingBoxes), key=lambda b: b[1][i], reverse=reverse))
+    #(cnts, boundingBoxes) = zip(*sorted(zip(cnts,boundingBoxes), key=lambda b: b[1][i], reverse=reverse))
+    (cnts, boundingBoxes) = zip(*sorted(zip(cnts, boundingBoxes), key=new_sort(cnts[1][i], cnts[2][i]
+                                                                               , cnts[1][i+1], cnts[2][i+1]), reverse=reverse))
 
     #print(boundingBoxes)
 
     return (cnts,boundingBoxes)
+
+
+def sortContour(cnts):
+    boundingBoxes = [cv2.boundingRect(c) for c in cnts]
+    #(cnts, boundingBoxes) = zip(*sorted(zip(cnts,boundingBoxes), key=lambda b: b[1][0]))
+    (cnts, boundingBoxes) = zip(*sorted(zip(cnts,boundingBoxes), key=lambda b: b[1][1]))
+
+    return (cnts,boundingBoxes)
+
 
 
 def convex():
@@ -49,25 +64,18 @@ def convex():
         img = cv2.imread("../images/ss.jpg")
         imgray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
+
         ret, thr = cv2.threshold(imgray, 55, 255, 0)
         _, contours, _ = cv2.findContours(thr, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-        cnts, boxes = sort_contours(contours, "top-to-bottom")
-        bx, by, bw, bh = 0, 0, 0, 0
+        cnts, boxes = sortContour(contours)
+        print(boxes)
         for i in range(len(boxes)):
-            x, y, w, h = boxes[i][0] , boxes[i][1], boxes[i][2], boxes[i][3]
-            if i > 0:
-                if (by - y) >= 0:
-                    if(bw - w) >= 0:
-                        cv2.rectangle(img, (bx, by), (bx + bw, by + bh), (0, 0, 255), 3)
-                    else:
-                        cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 3)
-                else:
-                    cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 3)
-            else:
-                cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 3)
-            bx, by, bw, bh = x, y, w, h
-            img = draw_contour(img, contours[i], i)
+            x, y, w, h = boxes[i][0], boxes[i][1], boxes[i][2], boxes[i][3]
+
+            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 3)
+
+            img = draw_contour(img, cnts[i], i)
 
 
         cv2.imwrite("../images/contours.jpg", img)
