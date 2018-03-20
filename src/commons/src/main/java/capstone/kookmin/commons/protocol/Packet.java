@@ -8,6 +8,13 @@ import java.io.Serializable;
  */
 public class Packet implements Serializable {
 	private static final long serialVersionUID = 332020868809166619L;
+
+	/** statusCode의 상수 값 */
+	public static final int SUCCESS = 100;
+	public static final int LOGICAL_ERROR = 200;
+	public static final int SYSTEM_ERROR = 300;
+	public static final int IMAGE_SEND = 500;
+
 	/***** Header *****/
 	/**
 	 * <li> 100: Success </li>
