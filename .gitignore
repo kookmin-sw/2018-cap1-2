@@ -48,3 +48,5 @@ buildNumber.properties
 # IntelliJ
 .idea
 src/**/classes
+src/**/src/main/java/META-INF/
+src/**/src/main/resources/
