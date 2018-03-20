@@ -56,7 +56,7 @@ public class Worker extends Thread {
 			String convertedFilePath = interpreterCall();
 			
 			/* Logical Error(statusCode: 200) 인 경우만 현재 테스트 중 */
-			send(200, new int[] {1}, pseudoFilePath);
+			send(Packet.LOGICAL_ERROR, new int[] {1}, pseudoFilePath);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -81,7 +81,7 @@ public class Worker extends Thread {
 			throw new Exception("Not Packet Type!");
 
 		Packet packet = (Packet) recv;
-		if (packet.getStatusCode() != 500)
+		if (packet.getStatusCode() != Packet.IMAGE_SEND)
 			throw new Exception("Not Image Packet!");
 
 		bos.write(packet.getImages());
@@ -119,7 +119,7 @@ public class Worker extends Thread {
 	/**
 	 * Logical Error 시 전송
 	 * @param statusCode 200
-	 * @param errorLiens 빨간 줄을 칠 에러가 발생한 라인이 담긴 배열
+	 * @param errorLines 빨간 줄을 칠 에러가 발생한 라인이 담긴 배열
 	 * @param pseudoPath 수도코드가 저장된 경로
 	 * @throws IOException
 	 */
