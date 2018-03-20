@@ -47,3 +47,4 @@ buildNumber.properties
 
 # IntelliJ
 .idea
+src/**/classes
