@@ -45,3 +45,5 @@ buildNumber.properties
 /captures
 .externalNativeBuild
 
+# IntelliJ
+.idea
