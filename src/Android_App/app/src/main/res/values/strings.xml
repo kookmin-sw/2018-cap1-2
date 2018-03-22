@@ -3,16 +3,28 @@
 
     <!-- commons -->
     <string name="back">돌아가기</string>
+    <string name="ok">확인</string>
+
+    <!-- MainActivity -->
+    <string name="camera">사진 촬영</string>
+    <string name="gallery">사진첩에서 불러오기</string>
+    <string name="send">전송</string>
+    <string name="description">imagefile to be sent</string>
 
     <!-- IndexActivity -->
     <string name="loading">변환 처리중...</string>
 
     <!--SystemErrorActivity -->
     <string name="system_error">시스템 오류</string>
-    <string name="system_error_comment">오류가 발생하여 변환에 실패하였습니다.</string>
+    <string name="system_error_comment">오류가 발생하여 변환에 실패하였습니다</string>
 
 
     <!-- LogicalErrorActivity -->
     <string name="logical_error">변환에 실패하였습니다.</string>
+
+    <!-- SuccessResultActivity -->
+    <string name="success_result">변환에 성공하였습니다</string>
+    <string name="pseudo">Pseudo Code</string>
+    <string name="java">Java Code</string>
 
 </resources>

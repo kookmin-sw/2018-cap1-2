@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:background="@color/coway_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -18,15 +19,14 @@
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:layout_weight="8"
-        android:layout_marginHorizontal="@dimen/horizontal_margin"
-        android:layout_marginVertical="@dimen/vertical_margin"
+        android:layout_margin="@dimen/vertical_margin"
         android:fillViewport="true"
         android:scrollbars="vertical">
 
         <TextView
             android:id="@+id/pseudoTxt"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content" />
     </ScrollView>
 
     <Button

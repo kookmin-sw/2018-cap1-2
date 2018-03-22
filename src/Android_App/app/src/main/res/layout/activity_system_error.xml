@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginVertical="@dimen/vertical_margin"
+            android:layout_margin="@dimen/vertical_margin"
             android:text="@string/system_error_comment"
             android:textSize="@dimen/text_size_medium"/>
 
@@ -36,7 +36,7 @@
             android:id="@+id/errorImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/vertical_large_margin"
+            android:layout_margin="@dimen/vertical_large_margin"
             app:srcCompat="@drawable/warning" />
     </LinearLayout>
 
@@ -46,6 +46,6 @@
         android:layout_height="75dp"
         android:layout_gravity="bottom"
         android:layout_weight="2"
-        android:text="돌아가기"
+        android:text="@string/back"
         android:layout_marginBottom="@dimen/small_margin"/>
 </LinearLayout>

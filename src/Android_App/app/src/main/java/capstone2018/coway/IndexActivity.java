@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -46,7 +45,6 @@ public class IndexActivity extends AppCompatActivity {
 
     private void setView() {
         progressBar = findViewById(R.id.progressBar);
-        TextView loadingTxt = findViewById(R.id.loadingTxt);
     }
 
     private void getImageBytes() {
@@ -63,8 +61,8 @@ public class IndexActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressBar.setVisibility(View.VISIBLE);
             Log.d(SocketTAG, "onPreExecute().");
+            progressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -73,7 +71,7 @@ public class IndexActivity extends AppCompatActivity {
             Log.d(SocketTAG,"doInBackground()");
             setSocket();
 
-            Log.d(TAG, "isCancelled() : " + isCancelled() + ", isConnected() : " + socket.isConnected());
+//            Log.d(TAG, "isCancelled() : " + isCancelled() + ", isConnected() : " + socket.isConnected());
             try{
                 if(isCancelled() || !socket.isConnected() || imageBytes == null) {
                     throw new Exception("socket setting is not complete.");
@@ -95,6 +93,7 @@ public class IndexActivity extends AppCompatActivity {
 
         private void send() throws IOException {
             Log.d(SocketTAG, "Send image.");
+
             output = new ObjectOutputStream(socket.getOutputStream());
             output.writeObject(new Packet(Packet.IMAGE_SEND,imageBytes));
         }
@@ -115,38 +114,58 @@ public class IndexActivity extends AppCompatActivity {
             Log.d(SocketTAG,"onPostExecute()");
             progressBar.setVisibility(View.INVISIBLE);
 
-
-            //system error
             if (packet.getStatusCode() == Packet.SYSTEM_ERROR) {
-                Log.d(TAG, "Nothing to be received");
-                Intent failIntent = new Intent(IndexActivity.this, SystemErrorActivity.class);
-                startActivity(failIntent);
-            //success
+                goSystemErrorActivity();
             } else if (packet.getStatusCode() == Packet.SUCCESS) {
-                Log.d(TAG, "Success.");
-                Intent successIntent = new Intent(IndexActivity.this, SuccessResultActivity.class);
-                successIntent.putExtra("pseudo_txt", packet.getPseudoLines());
-                successIntent.putExtra("java_txt", packet.getJavaLines());
-                startActivity(successIntent);
-            //logical error
+                goSuccessResultActivity();
             } else if (packet.getStatusCode() == Packet.LOGICAL_ERROR){
-                Log.d(TAG,"Logical Error occur");
-                Intent logicalErrorIntent = new Intent(IndexActivity.this, LogicalErrorActivity.class);
-                logicalErrorIntent.putExtra("psuedo_txt",packet.getPseudoLines());
-                logicalErrorIntent.putExtra("error_lines", packet.getErrorLines());
-                startActivity(logicalErrorIntent);
+               goLogicalErrorActivity();
+            } else {
+                Log.d(TAG,"Unsupported status code");
+                goSystemErrorActivity();
             }
+        }
+
+        private void goSystemErrorActivity(){
+            Log.d(TAG, "System error occur.");
+
+            Intent failIntent = new Intent(IndexActivity.this, SystemErrorActivity.class);
+
+            startActivity(failIntent);
+            finish();
+        }
+
+        private void goSuccessResultActivity(){
+            Log.d(TAG, "Success.");
+
+            Intent successIntent = new Intent(IndexActivity.this, SuccessResultActivity.class);
+
+            successIntent.putExtra("pseudo_txt", packet.getPseudoLines());
+            successIntent.putExtra("java_txt", packet.getJavaLines());
+
+            startActivity(successIntent);
+            finish();
+        }
+
+        private void goLogicalErrorActivity(){
+            Log.d(TAG,"Logical Error occur");
+
+            Intent logicalErrorIntent = new Intent(IndexActivity.this, LogicalErrorActivity.class);
+
+            logicalErrorIntent.putExtra("psuedo_txt",packet.getPseudoLines());
+            logicalErrorIntent.putExtra("error_lines", packet.getErrorLines());
+
+            startActivity(logicalErrorIntent);
+            finish();
         }
 
         @Override
         protected void onCancelled() {
             super.onCancelled();
+            Log.d(TAG, "OnCancelled()");
 
             progressBar.setVisibility(View.INVISIBLE);
-
-            Log.d(TAG, "OncCancelled()");
-            Intent failIntent = new Intent(IndexActivity.this, SystemErrorActivity.class);
-            startActivity(failIntent);
+            goSystemErrorActivity();
 
         }
 

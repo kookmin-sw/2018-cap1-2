@@ -24,8 +24,6 @@ public class SystemErrorActivity extends AppCompatActivity {
     }
 
     private void setView(){
-        TextView errorComment = findViewById(R.id.systemErrComment);
-        ImageView errorImage = findViewById(R.id.errorImage);
         backBtn = findViewById(R.id.backBtn);
 
         backBtn.setOnClickListener(new View.OnClickListener() {
