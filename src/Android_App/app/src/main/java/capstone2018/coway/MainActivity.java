@@ -149,15 +149,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * thread 생성
+     * indexActivity 에 imagebyte 전송 및 이동
      */
     private void sendPhoto(){
-        if(photoURI != null) {
-
-
-            ClientThread thread = new ClientThread();
-            thread.start();
-            Log.d(TAG, "Client Thread Start.");
+        if(imageByte != null) {
+            Intent intent = new Intent(MainActivity.this, IndexActivity.class);
+            intent.putExtra("imageBytes", imageByte);
+            startActivity(intent);
         }
         else{
             Toast.makeText(this,"사진을 먼저 선택해주세요",Toast.LENGTH_SHORT).show();
@@ -185,14 +183,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             intent.putExtra("crop", "true");
-//            intent.putExtra("aspectX", 4);
-//            intent.putExtra("aspectY", 7);
             intent.putExtra("scale", true);
-            File croppedFileName = null;
-            croppedFileName = makePictureFile();
-
-            File folder = new File(Environment.getExternalStorageDirectory() + "/test/");
-            File tempFile = new File(folder.toString(), croppedFileName.getName());
 
             photoURI = FileProvider.getUriForFile(MainActivity.this,
                     BuildConfig.APPLICATION_ID + ".provider",
@@ -200,7 +191,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-
 
             intent.putExtra("return-data", false);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
@@ -250,18 +240,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //메인 화면 사진 변경
         else if (requestCode == 3){
             Log.d(TAG,"after crop, imagePath : " + imagePath);
-            if(imagePath == "") {
-                photoURI = data.getData();
-                imagePath = getPath(photoURI);
-            }
-            Log.d(TAG, "imagePath check : imagePath = " + imagePath);
+
             BitmapFactory.Options factory = new BitmapFactory.Options();
             factory.inJustDecodeBounds = false;
-
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath, factory);
             Log.d(TAG,"bitmap : " + bitmap);
             imageByte = getBytesFromBitmap(bitmap);
-            packet = new Packet(500, imageByte);
             photoView.setImageBitmap(bitmap);
         }
     }
@@ -335,51 +319,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void showNoPermissionToast(){
         Toast.makeText(this, "해당 서비스 이용을 위해 설정에서 권한을 허용해주시기 바랍니다.",Toast.LENGTH_SHORT).show();
         finish();
-    }
-
-    /**
-     * socket 통신을 위한 thread class로 byte 형태의 image 전송
-     */
-    class ClientThread extends Thread {
-        public void run(){
-            String ClientTAG = "Client Thread";
-            String host = "49.236.144.45";
-            int port = 13579;
-            Boolean connected = true;
-            Log.d(ClientTAG,"Client Thread is working.");
-
-            try {
-                Socket socket = new Socket(host, port);
-
-                while (connected) {
-                    try {
-                        outputStream = new ObjectOutputStream(socket.getOutputStream());
-                        Log.d(ClientTAG, "Image Write.");
-                        outputStream.writeObject(packet);
-
-                        outputStream.close();
-                        connected = false;
-
-                        Log.d(ClientTAG, "Image sent.");
-
-                        Intent intent = new Intent(MainActivity.this, IndexActivity.class);
-                        startActivity(intent);
-
-
-                    } catch (Exception e) {
-                        Log.e(ClientTAG, "Error", e);
-                        connected = false;
-                        socket.close();
-                    }
-                }
-                socket.close();
-                Log.d(ClientTAG,"Socket is Closed.");
-            }
-            catch (Exception e){
-                Log.e(ClientTAG,"Error",e);
-                e.printStackTrace();
-            }
-        }
     }
 
     /**
