@@ -26,12 +26,15 @@ import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import capstone.kookmin.commons.protocol.Packet;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -42,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button sendBtn = null;
     private ImageView photoView = null;
     private Uri photoURI = null;
+    private Packet packet= null;
+    private ObjectOutputStream outputStream= null;
     private byte [] imageByte = null;
     private String imagePath = "";
     private String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -148,6 +153,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void sendPhoto(){
         if(photoURI != null) {
+
+
             ClientThread thread = new ClientThread();
             thread.start();
             Log.d(TAG, "Client Thread Start.");
@@ -254,6 +261,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath, factory);
             Log.d(TAG,"bitmap : " + bitmap);
             imageByte = getBytesFromBitmap(bitmap);
+            packet = new Packet(500, imageByte);
             photoView.setImageBitmap(bitmap);
         }
     }
@@ -345,9 +353,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 while (connected) {
                     try {
-                        OutputStream outputStream = socket.getOutputStream();
+                        outputStream = new ObjectOutputStream(socket.getOutputStream());
                         Log.d(ClientTAG, "Image Write.");
-                        outputStream.write(imageByte);
+                        outputStream.writeObject(packet);
+
                         outputStream.close();
                         connected = false;
 
@@ -359,6 +368,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     } catch (Exception e) {
                         Log.e(ClientTAG, "Error", e);
+                        connected = false;
+                        socket.close();
                     }
                 }
                 socket.close();

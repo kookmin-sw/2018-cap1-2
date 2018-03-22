@@ -11,11 +11,22 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InterruptedIOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
+import java.net.SocketTimeoutException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
+import capstone.kookmin.commons.protocol.Packet;
 
 public class IndexActivity extends AppCompatActivity {
 
@@ -24,9 +35,9 @@ public class IndexActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private Socket socket;
     private ReceiveAsync receiveAsync;
-    private DataInputStream input;
-    private String data = null;
-    private boolean connected = false;
+    private ObjectInputStream input;
+    private Packet packet = null;
+    private int statusCode = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,26 +71,31 @@ public class IndexActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            int cancel;
 
             Log.d(ClientTAG,"doInBackground()");
             setSocket();
 
-            while (isCancelled() == false && socket.isConnected()) {
+            Log.d(TAG, "isCancelled() : " + isCancelled() + ", isConnected() : " + socket.isConnected());
+            while (!isCancelled() && socket.isConnected()) {
                 Log.d(ClientTAG, "try to receive data");
                 try {
-                    socket.setSoTimeout(2000);
-                    InputStream in = socket.getInputStream();
-                    while ((cancel = in.read()) != -1) {
-                        Log.d(ClientTAG, "Client Thread start");
-                        input = new DataInputStream(socket.getInputStream());
-                        data = input.readUTF();
+                    int cancel;
+                    Log.d(ClientTAG, "Client Thread start");
+
+                    input = new ObjectInputStream(socket.getInputStream());
+
+                    while((cancel = input.read()) != -1) {
+                        packet = (Packet) input.readObject();
+                        statusCode = packet.getStatusCode();
                     }
-                    if (cancel == -1) {
-                        Log.d(ClientTAG, "I/O Interrupt.");
-                    }
-                    Log.d(ClientTAG, "Input data : " + data);
-                } catch (Exception e) {
+
+                    Log.d(ClientTAG,"requestCode : " + packet.getStatusCode());
+                    socket.close();
+                }
+                catch(SocketTimeoutException e1){
+                    e1.printStackTrace();
+                    cancel(true);
+                }catch (Exception e) {
                     e.printStackTrace();
                     return null;
                 }
@@ -94,15 +110,38 @@ public class IndexActivity extends AppCompatActivity {
             super.onPostExecute(aVoid);
 
             progressBar.setVisibility(View.INVISIBLE);
-            if (TextUtils.isEmpty(data)) {
+            //system error
+            if (statusCode == 300) {
                 Log.d(TAG, "Nothing to be received");
                 Intent failIntent = new Intent(IndexActivity.this, SystemErrorActivity.class);
                 startActivity(failIntent);
-            } else {
+            //success
+            } else if (statusCode == 100) {
+                Log.d(TAG, "Success.");
                 Intent successIntent = new Intent(IndexActivity.this, SuccessResultActivity.class);
-                successIntent.putExtra("received_Data", data);
+                successIntent.putExtra("pseudo_txt", packet.getPseudoLines());
+                successIntent.putExtra("java_txt", packet.getJavaLines());
                 startActivity(successIntent);
+            //logical error
+            } else if (statusCode == 200){
+                Log.d(TAG,"Logical Error occur");
+                Intent logicalErrorIntent = new Intent(IndexActivity.this, LogicalErrorActivity.class);
+                logicalErrorIntent.putExtra("psuedo_txt",packet.getPseudoLines());
+                logicalErrorIntent.putExtra("error_lines", packet.getErrorLines());
+                startActivity(logicalErrorIntent);
             }
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+
+            progressBar.setVisibility(View.INVISIBLE);
+
+            Log.d(TAG, "Nothing to be received");
+            Intent failIntent = new Intent(IndexActivity.this, SystemErrorActivity.class);
+            startActivity(failIntent);
+
         }
 
         private void setSocket(){
@@ -110,8 +149,12 @@ public class IndexActivity extends AppCompatActivity {
             int port = 13579;
 
             try{
-                socket = new Socket(ip, port);
-                connected = socket.isConnected();
+                SocketAddress socketAddress = new InetSocketAddress(ip,port);
+                int timeout = 3000;
+                socket = new Socket();
+                socket.setSoTimeout(timeout);
+
+                socket.connect(socketAddress,timeout);
                 Log.d(ClientTAG,"socket open");
 
             }catch (Exception e){
