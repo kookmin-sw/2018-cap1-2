@@ -4,17 +4,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:text="@string/logical_error"
+        android:textSize="@dimen/text_size_large"/>
+
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="vertical"
-        android:fillViewport="true">
+        android:layout_height="250dp"
+        android:layout_weight="8"
+        android:layout_marginHorizontal="@dimen/horizontal_margin"
+        android:layout_marginVertical="@dimen/vertical_margin"
+        android:fillViewport="true"
+        android:scrollbars="vertical">
 
         <TextView
             android:id="@+id/pseudoTxt"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1.0"/>
+            android:layout_height="match_parent" />
     </ScrollView>
+
+    <Button
+        android:id="@+id/backBtn"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/back" />
 </LinearLayout>
