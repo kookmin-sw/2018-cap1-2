@@ -41,6 +41,6 @@ splitted: [ "for", "i", "0", "N" ]
 ## 3. After interpreting, Save the converted result as `.java` files
 ````
 for(int i=0;i<=N;i++){
-  System.out.println("i");
+  System.out.println("Hello World");
 }
 ````

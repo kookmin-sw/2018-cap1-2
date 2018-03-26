@@ -41,6 +41,6 @@ pseudo[2] = "}"
 ## 3. 모든 인터프리팅이 종료되면 `.java` 파일로 저장한다.
 ````
 for(int i=0;i<=N;i++){
-  System.out.println("i");
+  System.out.println("Hello World");
 }
 ````
