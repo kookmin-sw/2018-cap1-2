@@ -16,45 +16,10 @@ def draw_contour(image, c, i):
     return image
 
 
-def isSame(bx, by, bw, bh, x, y, w, h):
-    result = False
-    if (by - bh) > (y - h) > 0:
-        result = True
-    return result
-
-
-def new_sort(ax, ay):
-    return (ax + 100 * ay)
-
-
-def sort_contours(cnts, method="left-to-right"):
-    reverse = False
-    i = 0
-
-    #reverse
-    if method == "right-to-left" or method == "bottom-to-top" :
-        reverse = True
-
-    # sorting by y-coordinate
-    if method == "top-to-bottom" or method == "bottom-to-top" :
-        i = 1
-
-    # construct the list of boxes and sort
-    boundingBoxes = [cv2.boundingRect(c) for c in cnts]
-    #(cnts, boundingBoxes) = zip(*sorted(zip(cnts,boundingBoxes), key=lambda b: b[1][i], reverse=reverse))
-    (cnts, boundingBoxes) = zip(*sorted(zip(cnts, boundingBoxes), key=new_sort(cnts[1][i], cnts[2][i]
-                                                                               , cnts[1][i+1], cnts[2][i+1]), reverse=reverse))
-
-    #print(boundingBoxes)
-
-    return (cnts,boundingBoxes)
-
-
 def sortContour(cnts):
     boundingBoxes = [cv2.boundingRect(c) for c in cnts]
-    #(cnts, boundingBoxes) = zip(*sorted(zip(cnts,boundingBoxes), key=lambda b: b[1][0]))
     (cnts, boundingBoxes) = zip(*sorted(zip(cnts,boundingBoxes), key=lambda b: b[1][1]))
-
+    #sort by x*y corrd for make
     return (cnts,boundingBoxes)
 
 
@@ -70,26 +35,34 @@ def convex():
 
         cnts, boxes = sortContour(contours)
         print(boxes)
+        k = 0
+        height = 0
         for i in range(len(boxes)):
             x, y, w, h = boxes[i][0], boxes[i][1], boxes[i][2], boxes[i][3]
-
+            k = k + boxes[i][1]
+            height = boxes[i][3]
             cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 3)
 
             img = draw_contour(img, cnts[i], i)
 
+        avg = (k / len(boxes))
+        avgH = (h / len(boxes))
+        lineOne = []
+        lineTwo = []
+        lineThree = []
 
+        for i in range(len(boxes)):
+            y = boxes[i][1]
+            if y >= 0 and y <= avg - avgH:
+                lineOne.append(boxes[i])
+            elif y >= avg and y <= avg + avgH:
+                lineTwo.append(boxes[i])
+            elif y > avg + avgH:
+                lineThree.append(boxes[i])
+
+        print(lineOne)
         cv2.imwrite("../images/contours.jpg", img)
 
 
 convex()
 
-#need to do
-#to make chars like i,= in one contour,
-#consider the height between contours.(maybe)
-#if that is close enough, make them as same contour
-#
-#two chars become one contour if they are too close
-#need to find a way to seperate them and make contours each.
-#
-#final goal is make contours for every chars, and contours should be
-#seperated from each other.
