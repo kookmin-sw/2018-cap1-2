@@ -1,6 +1,18 @@
 import cv2
+import sys
+import cntClass
 
 
+#   p = cntClass.contours()
+#   p.setData(x,y,w,h)
+#
+#
+#
+#
+#
+#
+#
+#
 def draw_contour(image, c, i):
     # compute the center of the contour area and draw a circle
     # representing the center
@@ -28,39 +40,30 @@ def convex():
 
         img = cv2.imread("../images/ss.jpg")
         imgray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-
         ret, thr = cv2.threshold(imgray, 55, 255, 0)
         _, contours, _ = cv2.findContours(thr, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         cnts, boxes = sortContour(contours)
-        print(boxes)
-        k = 0
-        height = 0
+        k = []
+        corY = boxes[0][1]
+        corH = boxes[0][3]
+        line = 1
+
         for i in range(len(boxes)):
             x, y, w, h = boxes[i][0], boxes[i][1], boxes[i][2], boxes[i][3]
-            k = k + boxes[i][1]
-            height = boxes[i][3]
+            tmp = cntClass.contours()
+            tmp.setData(x, y, w, h)
+            if y >= corY - corH and y <= corY +corH:
+                tmp.setLine(line)
+            else:
+                corY = boxes[i][1]
+                line += 1
+                tmp.setLine(line)
+            k.append(tmp)
             cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 3)
+            img = draw_contour(img, cnts[i], k[i].getLine() - 1)
+            print(k[i].getLine())
 
-            img = draw_contour(img, cnts[i], i)
-
-        avg = (k / len(boxes))
-        avgH = (h / len(boxes))
-        lineOne = []
-        lineTwo = []
-        lineThree = []
-
-        for i in range(len(boxes)):
-            y = boxes[i][1]
-            if y >= 0 and y <= avg - avgH:
-                lineOne.append(boxes[i])
-            elif y >= avg and y <= avg + avgH:
-                lineTwo.append(boxes[i])
-            elif y > avg + avgH:
-                lineThree.append(boxes[i])
-
-        print(lineOne)
         cv2.imwrite("../images/contours.jpg", img)
 
 
