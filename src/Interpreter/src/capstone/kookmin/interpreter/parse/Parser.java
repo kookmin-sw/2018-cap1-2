@@ -79,8 +79,20 @@ public class Parser {
 	 */
 	private String match(String line) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 		String converted = line;
+
+		/* 변수 타입추론 들어갈 부분 */
+		try{
+			return VarMatcher.convert(line);
+		}
+		catch(Exception e){
+			// 변수 선언 형태가 아니라는 의미
+		}
+
+
+		/* 변수 타입추론할 라인이 아닐 시 일반 예약어 매칭 진행 */
 		line = line.replaceAll(" |\\t", ""); //공백, 탭문자 제거
-		
+
+		/* 특수문자 기준으로 쪼개서 순서대로 typeTable에 있는지 검사 & 매칭 */
 		for(String each : line.split("\\W+")) {
 			if(typeTable.contains(each)) {
 				Type type = DAO.getType(each);

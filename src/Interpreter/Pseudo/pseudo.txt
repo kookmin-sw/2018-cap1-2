@@ -9,3 +9,6 @@ for(j = 0 -> M) { // Second example
 for(k -> 0 : N) { // Third example
 	print(k)
 }
+
+myVar = 123412341234
+twice = 20151020
