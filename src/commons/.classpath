@@ -22,6 +22,5 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/이성준/eclipse-workspace/2018-cap1-2/bin/lib/commons-0.0.0.4.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

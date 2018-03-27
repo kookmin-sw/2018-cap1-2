@@ -1,6 +1,7 @@
 
 # Compiled class file
 *.class
+.classpath
 
 # Log file
 *.log
@@ -12,7 +13,6 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.ear
 *.zip
@@ -21,7 +21,6 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-/bin/
 /target/
 target
 pom.xml.tag
@@ -46,3 +45,8 @@ buildNumber.properties
 /captures
 .externalNativeBuild
 
+# IntelliJ
+.idea
+src/**/classes
+src/**/src/main/java/META-INF/
+src/**/src/main/resources/
