@@ -10,5 +10,6 @@ for(k -> 0 : N) { // Third example
 	print(k)
 }
 
-myVar = 123412341234
 twice = 20151020
+myVar = 123412341234
+myVar = 111111111111
