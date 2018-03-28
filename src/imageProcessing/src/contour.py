@@ -3,29 +3,23 @@ import sys
 import cntClass
 
 
-#   p = cntClass.contours()
-#   p.setData(x,y,w,h)
+#   For understanding the structure below code.
+#   EX>
+#   k is list for line list. k = [[line One] , [line Two] , [line Three] , ...]
 #
+#   Each line list(list line line One mentioned above) have cntClass object detected before,
+#   line One = [cntClass1 , cntClass2, cntClass3, ...]
+#   Total cntClass numbers are same with detected chars in img.
 #
+#   ntClass object have 4 values of x,y,w,h and value of line position
+#   Class can return every value it has, also has a method that return center coordinate value.
+#   Check cntClass.py for how method defined.
 #
+#   Finally, structure of complete list would be
+#   k = [[cntClass1, cntClass2, cntClass3, ...] , [cntClass1, cntClass2, ...] , ...]
 #
+#   Accessing to each chars contour would be k[line number][index of chars].method()
 #
-#
-#
-#
-def draw_contour(image, c, i):
-    # compute the center of the contour area and draw a circle
-    # representing the center
-    M = cv2.moments(c)
-    cX = int(M["m10"] / M["m00"])
-    cY = int(M["m01"] / M["m00"])
-
-    # draw the countour number on the image
-    cv2.putText(image, "#{}".format(i + 1), (cX - 20, cY), cv2.FONT_HERSHEY_SIMPLEX,
-                3.0, (0, 255, 0), 2)
-
-    # return the image with the contour number drawn on it
-    return image
 
 
 def sortContour(cnts):
