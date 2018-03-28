@@ -44,7 +44,7 @@ def convex():
         _, contours, _ = cv2.findContours(thr, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         cnts, boxes = sortContour(contours)
-        k = []
+        k = [[]]
         corY = boxes[0][1]
         corH = boxes[0][3]
         line = 1
@@ -59,11 +59,16 @@ def convex():
                 corY = boxes[i][1]
                 line += 1
                 tmp.setLine(line)
-            k.append(tmp)
+                k.append([])
+            k[tmp.getLine() - 1].append(tmp)
             cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 3)
-            img = draw_contour(img, cnts[i], k[i].getLine() - 1)
-            print(k[i].getLine())
 
+        for i in range(len(k)):
+            for j in range(len(k[i])):
+                k[i].sort(key=lambda x :x.getX())
+                cv2.putText(img, "#{}".format(j + 1), (k[i][j].getX() + int(0.5 * k[i][j].getW()) - 20, k[i][j].getY() + int(0.5 * k[i][j].getH())),
+                            cv2.FONT_HERSHEY_SIMPLEX,
+                            3.0, (0, 255, 0), 2)
         cv2.imwrite("../images/contours.jpg", img)
 
 
