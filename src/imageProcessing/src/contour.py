@@ -55,7 +55,7 @@ def convex():
                 tmp.setLine(line)
                 k.append([])
             k[tmp.getLine() - 1].append(tmp)
-            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 3)
+            #cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 3)
 
         for i in range(len(k)):
             for j in range(len(k[i])):
@@ -63,6 +63,29 @@ def convex():
                 cv2.putText(img, "#{}".format(j + 1), (k[i][j].getX() + int(0.5 * k[i][j].getW()) - 20, k[i][j].getY() + int(0.5 * k[i][j].getH())),
                             cv2.FONT_HERSHEY_SIMPLEX,
                             3.0, (0, 255, 0), 2)
+
+        for i in range(len(k)):
+            for j in k[i]:
+                leftCheck = j.getX() - j.getW()
+                rightCheck = j.getX() + j.getW()
+                heightCheck = j.getY()
+                for p in k[i]:
+                    targetX = p.getX()
+                    targetY = p.getY()
+                    if j.getX() == targetX:
+                        continue
+                    else:
+                        if leftCheck <= targetX and targetX <= rightCheck and targetY <= heightCheck:
+                            tmpW = p.getW()
+                            tmpH = j.getH() + j.getY() - targetY
+                            p.setData(targetX,targetY,tmpW,tmpH)
+                            j.setData(targetX,targetY,tmpW,tmpH)
+                            #cv2.rectangle(img, (targetX, targetY), (targetX +p.getW(), j.getY() + j.getH()
+                             #                                        ), (0, 0, 255), 3)
+        for i in range(len(k)):
+            for j in k[i]:
+                cv2.rectangle(img, (j.getX(), j.getY()), (j.getX() + j.getW(), j.getY() + j.getH()), (0, 0, 255), 3)
+
         cv2.imwrite("../images/contours.jpg", img)
 
 
