@@ -1,5 +1,6 @@
 package capstone.kookmin.interpreter.parse;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -12,41 +13,43 @@ public class VarMatcher {
     /** <key: varName, value: varType> */
     private static final HashMap<String, String> VAR_TABLE = new HashMap<>();
     /** <key: 변수 자료형, value: 자료형 이름> */
-    private static final HashMap<Integer, String> DATA_TYPE = new HashMap<Integer, String>(){{
-        put(INT, "INT");
-        put(LONG, "LONG");
-        put(FLOAT, "FLOAT");
-        put(DOUBLE, "DOUBLE");
-        put(CLASS, "CLASS");
-        put(METHOD, "METHOD");
-        put(CHAR, "CHAR");
-        put(STRING, "STRING");
-        put(ERROR, "ERROR");
+    private static final HashMap<Integer, String> DATA_TYPE = new HashMap<Integer, String>() {{
+        put(INT, "int");
+        put(LONG, "long");
+        put(FLOAT, "float");
+        put(DOUBLE, "double");
+        put(OBJECT, "object");
+        put(METHOD, "method");
+        put(CHAR, "char");
+        put(STRING, "String");
+        put(ERROR, "");
     }};
 
-    /** static way */
+     /** static way */
     private VarMatcher() {}
 
     private static final int INT = 0x01; // a = 1 (INTEGER.MAX_VALUE 이하)
     private static final int LONG = 0x02; // b = 10 (INTEGER.MAX_VALUE 초과)
-    private static final int FLOAT = 0x03; //안쓸듯
+    private static final int FLOAT = 0x03; // 안쓸듯
     private static final int DOUBLE = 0x04; // d = 3.14
-    private static final int CLASS = 0x05; // e = new MyClass()
+    private static final int OBJECT = 0x05; // e = new MyClass()
     private static final int METHOD = 0x06; // f = func()
     private static final int CHAR = 0x07; // g = 'c'
     private static final int STRING = 0x08; // h = "str"
     private static final int ERROR = -1; // 변환 불가능한 상태
+    private static final int INIT = 0; // 아무것도 하지 않은 초기 상태
 
     private static final String varRegex = "^[_a-zA-Z_$][a-zA-Z_$0-9]*\\s*=\\s*.*"; // var = .* 형태
-    private static final String numRegex = ""; //추가예정
-    private static final String strRegex = "";
-    private static final String fltRegex = "";
-    private static final String dblRegex = "";
-    private static final String clsRegex = "";
-    private static final String chrRegex = "";
+    private static final String strRegex = "\".*\"";
+    private static final String fltRegex = ""; // 안쓸듯
+    private static final String dblRegex = "\\d*\\.\\d*"; //"(\\d+(\\.\\d+)?)|(\\.\\d+)";
+    private static final String objRegex = "new [_a-zA-Z_$][a-zA-Z_$0-9]*\\(\\)";
+    private static final String mtdRegex = ""; // method call
+    private static final String chrRegex = "'.'";
 
     /**
      * 무조건 (var = ?) 형식이어야 한다.
+     *
      * @param line 변수 선언 라인인지 검증할 라인
      * @return 변수 선언부이면 true, 아니면 false
      */
@@ -54,32 +57,6 @@ public class VarMatcher {
         return line.matches(varRegex);
     }
 
-    /**
-     * 정수 자료형인지 검사하는 메서드
-     * @param line 정수형 선언인지 검사할 변수 선언부 라인
-     * @return int면 {@code INT}, long이면 {@code LONG}, 정수형이 아니면 {@code ERROR}를 리턴
-     */
-    private static int isNumeric(String line) {
-        /* 변수 선언 라인이 아니면 에러 */
-        if (isVarDeclare(line) == false) {
-            return ERROR;
-        }
-
-        String rhs = line.split("=")[1].replaceAll(" ", "");
-        int type = ERROR; // INT, LONG, ERROR 중 1
-
-        try {
-            long num = Long.parseLong(rhs);
-
-            if (num <= 0x7fffffff) type = INT;
-            else type = LONG;
-        } catch (Exception e) {
-            /* 형변환 실패 -> 숫자가 아니다. */
-            type = ERROR;
-        }
-
-        return type;
-    }
 
     public static String convert(String line) throws Exception {
         // 변수 형태가 아니면 에러
@@ -88,40 +65,108 @@ public class VarMatcher {
         }
 
         String lhs = line.split("=")[0].trim(); // 변수명
-        int type = ERROR;
+        String rhs = line.split("=")[1].trim(); // 변수값
+        int status, type = ERROR;
 
-        try{
+        try {
             /* int, long 검사 */
-            type = isNumeric(line);
-            if (type == INT) {
-                if(inputVarTable(lhs, type) == true) {
-                    line = "int " + line;
-                }
-                line += ";";
-            } else if (type == LONG) {
-                if(inputVarTable(lhs, type) == true) {
-                    line = "long " + line;
-                }
-                line += ";";
-            }
+            status = chkNumeric(rhs);
+            if (status != ERROR) type = status;
+
+            /* char 검사 */
+            status = chkChar(rhs);
+            if (status != ERROR) type = status;
+
+            /* String 검사 */
+            status = chkString(rhs);
+            if (status != ERROR) type = status;
 
             /* double 검사 */
-            // type = isDouble(line);
-            // if(type == DOUBLE) return "double " + line + ";";
-        } catch(Exception e){
+            status = chkDouble(rhs);
+            if (status != ERROR) type = status;
+
+            /* class 검사 */
+            status = chkObject(rhs);
+            if (status != ERROR) type = status;
+
+            /* 새로운 변수라면 기록하고 자료형 붙임 */
+            if (type != ERROR && inputVarTable(lhs, type) == true) {
+                if(type == OBJECT || type == METHOD){
+                    String objName = rhs.split(" ")[1].replaceAll("\\(\\)", "");
+                    line = objName + " " + line;
+                } else{
+                    line = DATA_TYPE.get(type) + " " + line;
+                }
+            }
+            line += ";";
+        } catch (Exception e) {
             // 변수의 중복 선언인 경우
             e.printStackTrace();
         }
 
-
         return line;
+    }
+
+    /**
+     * 정수 자료형인지 검사하는 메서드
+     *
+     * @param rhs 정수형 선언인지 검사할 변수 선언부 라인의 우변
+     * @return int면 {@code INT}, long이면 {@code LONG}, 정수형이 아니면 {@code ERROR}를 리턴
+     */
+    private static int chkNumeric(String rhs) {
+        try {
+            return Long.parseLong(rhs) <= 0x7fffffff ? INT : LONG;
+        } catch (Exception e) {
+            return ERROR; // 형변환 실패 -> 숫자가 아니다
+        }
+    }
+
+    /**
+     * char 자료형인지 검사하는 메서드
+     *
+     * @param rhs char 형 선언인지 검사할 변수 선언부 라인의 우변
+     * @return char면 {@code CHAR}, 아니면 {@code ERROR}를 리턴
+     */
+    private static int chkChar(String rhs) {
+        return rhs.trim().matches(chrRegex) ? CHAR : ERROR;
+    }
+
+    /**
+     * String 자료형인지 검사하는 메서드
+     *
+     * @param rhs String 형 선언인지 검사할 변수 선언부 라인의 우변
+     * @return String이면 {@code STRING}, 아니면 {@code ERROR}를 리턴
+     */
+    private static int chkString(String rhs) {
+        return rhs.trim().matches(strRegex) ? STRING : ERROR;
+    }
+
+    /**
+     * double 자료형인지 검사하는 메서드
+     *
+     * @param rhs double 형 선언인지 검사할 변수 선언부 라인의 우변
+     * @return double이면 {@code DOUBLE}, 아니면 {@code ERROR}를 리턴
+     */
+    private static int chkDouble(String rhs) {
+        return rhs.trim().matches(dblRegex) ? DOUBLE : ERROR;
+    }
+
+    /**
+     * Object 객체(class 등)인지 검사하는 메서드
+     *
+     * @param rhs Object 형 선언인지 검사할 변수 선언부 라인의 우변
+     * @return Object면 {@code OBJECT}, 아니면 {@code ERROR}를 리턴
+     */
+    private static int chkObject(String rhs) {
+        return rhs.trim().matches(objRegex) ? OBJECT : ERROR;
     }
 
     /**
      * 처음 선언하는 변수인지 여부를 기록 및 판단하는 메서드.
      * 첫 선언이면 {@code VAR_TABLE}에 기록한다.
      * 중복 선언인 경우 Exception 발생
-     * @param lhs 검증할 변수명
+     *
+     * @param lhs  검증할 변수명
      * @param TYPE 현재 변수명의 추론된 자료형
      * @return 처음 변수 선언이면 true, 재 정의이면 false
      * @throws Exception 같은 변수명의 다른 자료형을 선언한 적이 있는 중복선언의 경우
@@ -141,9 +186,8 @@ public class VarMatcher {
 
             System.out.println(VAR_TABLE);
 
-
             /* 서로 다른 자료형의 중복된 변수명 선언. ex) int var, long var */
-            if(befTypeName.equals(curTypeName) == false) {
+            if (befTypeName.equals(curTypeName) == false) {
                 throw new Exception(String.format(
                         "Duplicated variables [%s, %s]",
                         befTypeName + " " + lhs, curTypeName + " " + lhs));
@@ -164,14 +208,13 @@ public class VarMatcher {
         return isNew;
     }
 
-
-    public static void main(String[] args) throws Exception {
-        VarMatcher varMatcher = new VarMatcher();
-
-        String _int = "_var1 = 1324";
-        String _long = "_var2 = 111111111111";
-
-        System.out.println(varMatcher.convert(_int));
-        System.out.println(varMatcher.convert(_long));
+    public static void main(String[] args) {
+        String vars[] = {"a = 10", "b = '!'", "c = \"Hello World!\"", "d = 3.14", "e = new MyClass()"};
+        System.out.println("\n변환 전");
+        Arrays.stream(vars).forEach(System.out::println);
+        System.out.println("\n변환 후");
+        Arrays.stream(vars)
+                .map(var -> { try { return VarMatcher.convert(var); } catch (Exception e) { return var; } })
+                .forEach(System.out::println);
     }
 }

@@ -1,15 +1,32 @@
-for(i = 0 ~ N) { // First example
+for(i = 0 ~ N) { // First_example
 	print(i)
 }
 
-for(j = 0 -> M) { // Second example
+for(j = 0 -> M) { // Second_example
 	println(j)
 }
 
-for(k -> 0 : N) { // Third example
+for(k -> 0 : N) { // Third_example
 	print(k)
 }
 
-twice = 20151020
-myVar = 123412341234
-myVar = 111111111111
+//변수_매칭_테스트
+a = 10
+b = '!'
+c = "Hello World!"
+d = 3.14
+e = new TestClass()
+
+//재_정의_테스트
+a = 0
+b = '?'
+c = "Hell World!"
+d = 3.141592
+e = new TestClass()
+
+//변수_매칭_테스트
+id = 20123087
+operator = '+'
+tt = "ᕙ(•̀‸•́‶)ᕗ"
+kill = .1
+twice = new Twice()
