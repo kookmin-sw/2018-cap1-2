@@ -1,7 +1,10 @@
 package capstone.kookmin.interpreter.parse;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Variable Matcher
@@ -10,6 +13,8 @@ import java.util.HashMap;
  * @author 이성준
  */
 public class VarMatcher {
+    /** static way */
+    private VarMatcher() {}
     /** <key: varName, value: varType> */
     private static final HashMap<String, String> VAR_TABLE = new HashMap<>();
     /** <key: 변수 자료형, value: 자료형 이름> */
@@ -25,8 +30,10 @@ public class VarMatcher {
         put(ERROR, "");
     }};
 
-     /** static way */
-    private VarMatcher() {}
+    private static Class VAR_MATCHER_CLASS = VarMatcher.class;
+    private static List<Method> CHECK_METHOD = Arrays.stream(VAR_MATCHER_CLASS.getDeclaredMethods())
+            .filter(method -> method.getName().contains("chk"))
+            .collect(Collectors.toList());
 
     private static final int INT = 0x01; // a = 1 (INTEGER.MAX_VALUE 이하)
     private static final int LONG = 0x02; // b = 10 (INTEGER.MAX_VALUE 초과)
@@ -57,7 +64,12 @@ public class VarMatcher {
         return line.matches(varRegex);
     }
 
-
+    /**
+     * 변수 선언 라인 추론 & 변환 메서드
+     * @param line 변수 추론을 할 라인
+     * @return 변수 추론 결과가 포함된 라인
+     * @throws Exception 변수 선언부가 아니면 발생
+     */
     public static String convert(String line) throws Exception {
         // 변수 형태가 아니면 에러
         if (isVarDeclare(line) == false) {
@@ -66,35 +78,20 @@ public class VarMatcher {
 
         String lhs = line.split("=")[0].trim(); // 변수명
         String rhs = line.split("=")[1].trim(); // 변수값
-        int status, type = ERROR;
+        int type = ERROR;
 
         try {
-            /* int, long 검사 */
-            status = chkNumeric(rhs);
-            if (status != ERROR) type = status;
-
-            /* char 검사 */
-            status = chkChar(rhs);
-            if (status != ERROR) type = status;
-
-            /* String 검사 */
-            status = chkString(rhs);
-            if (status != ERROR) type = status;
-
-            /* double 검사 */
-            status = chkDouble(rhs);
-            if (status != ERROR) type = status;
-
-            /* class 검사 */
-            status = chkObject(rhs);
-            if (status != ERROR) type = status;
+            for(Method checker : CHECK_METHOD) {
+                type = (int) checker.invoke(VAR_MATCHER_CLASS, rhs);
+                if(type != ERROR) break;
+            }
 
             /* 새로운 변수라면 기록하고 자료형 붙임 */
             if (type != ERROR && inputVarTable(lhs, type) == true) {
                 if(type == OBJECT || type == METHOD){
                     String objName = rhs.split(" ")[1].replaceAll("\\(\\)", "");
                     line = objName + " " + line;
-                } else{
+                } else {
                     line = DATA_TYPE.get(type) + " " + line;
                 }
             }
@@ -184,8 +181,6 @@ public class VarMatcher {
             String befTypeName = VAR_TABLE.get(lhs); // 이전에 같은 변수명으로 저장되어 있던 자료형
             String curTypeName = DATA_TYPE.get(TYPE); // 현재 변수의 자료형
 
-            System.out.println(VAR_TABLE);
-
             /* 서로 다른 자료형의 중복된 변수명 선언. ex) int var, long var */
             if (befTypeName.equals(curTypeName) == false) {
                 throw new Exception(String.format(
@@ -208,7 +203,7 @@ public class VarMatcher {
         return isNew;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         String vars[] = {"a = 10", "b = '!'", "c = \"Hello World!\"", "d = 3.14", "e = new MyClass()"};
         System.out.println("\n변환 전");
         Arrays.stream(vars).forEach(System.out::println);
