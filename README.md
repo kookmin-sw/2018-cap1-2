@@ -27,7 +27,7 @@
 
 ## 박세용
 
-<img src=./doc/pic/sypark.jpg width="80px" height="80px">
+<img src=./doc/pic/sypark.jpg width="200px" height="200px">
 
 ````
 * 학번: 20123043
