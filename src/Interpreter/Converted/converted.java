@@ -30,3 +30,23 @@ char operator = '+';
 String tt = "ᕙ(•̀‸•́‶)ᕗ";
 double kill = .1;
 Twice twice = new Twice();
+
+main(String[] args){
+BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out));
+
+line[] = in.readLine().split(" ")
+n = Integer.parseInt(line[0])
+k = Integer.parseInt(line[1])
+int arr[] = new int[n];
+int p = 2;
+
+StringTokenizer st = new StringTokenizer(in.readLine(), " ");
+for(int i=0;i<=N;i++){
+   	    arr[i] = Integer.parseInt(st.nextToken())
+    }
+
+    out.write(quickSelect(arr, 0, n-1, k-1)+"")
+    out.close()
+    in.close()
+}

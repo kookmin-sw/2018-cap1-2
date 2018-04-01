@@ -27,6 +27,7 @@ public class VarMatcher {
         put(METHOD, "method");
         put(CHAR, "char");
         put(STRING, "String");
+        put(ARRAY, "array");
         put(ERROR, "");
     }};
 
@@ -43,16 +44,18 @@ public class VarMatcher {
     private static final int METHOD = 0x06; // f = func()
     private static final int CHAR = 0x07; // g = 'c'
     private static final int STRING = 0x08; // h = "str"
+    private static final int ARRAY = 0x09; // i = new int[n];
     private static final int ERROR = -1; // 변환 불가능한 상태
     private static final int INIT = 0; // 아무것도 하지 않은 초기 상태
 
-    private static final String varRegex = "^[_a-zA-Z_$][a-zA-Z_$0-9]*\\s*=\\s*.*"; // var = .* 형태
+    private static final String varRegex = "\\s*^[_a-zA-Z_$][a-zA-Z_$0-9]*(\\[\\])?\\s*=\\s*.*"; // var = ,* 또는 var[] = .* 형태
     private static final String strRegex = "\".*\"";
     private static final String fltRegex = ""; // 안쓸듯
-    private static final String dblRegex = "\\d*\\.\\d*"; //"(\\d+(\\.\\d+)?)|(\\.\\d+)";
-    private static final String objRegex = "new [_a-zA-Z_$][a-zA-Z_$0-9]*\\(\\)";
+    private static final String dblRegex = "\\d*\\.\\d*"; //"(\\d+(\\.\\d+)?)|(\\.\\d+)"
+    private static final String objRegex = "new [_a-zA-Z_$][a-zA-Z_$0-9]*\\(.*\\)";
     private static final String mtdRegex = ""; // method call
     private static final String chrRegex = "'.'";
+    private static final String arrRegex = "new [_a-zA-Z_$][a-zA-Z_$0-9]*\\[.*\\]"; // new int[k]
 
     /**
      * 무조건 (var = ?) 형식이어야 한다.
@@ -71,6 +74,7 @@ public class VarMatcher {
      * @throws Exception 변수 선언부가 아니면 발생
      */
     public static String convert(String line) throws Exception {
+        line = line.trim();
         // 변수 형태가 아니면 에러
         if (isVarDeclare(line) == false) {
             throw new Exception("Not variable declaration format");
@@ -83,19 +87,23 @@ public class VarMatcher {
         try {
             for(Method checker : CHECK_METHOD) {
                 type = (int) checker.invoke(VAR_MATCHER_CLASS, rhs);
-                if(type != ERROR) break;
-            }
-
-            /* 새로운 변수라면 기록하고 자료형 붙임 */
-            if (type != ERROR && inputVarTable(lhs, type) == true) {
-                if(type == OBJECT || type == METHOD){
-                    String objName = rhs.split(" ")[1].replaceAll("\\(\\)", "");
-                    line = objName + " " + line;
-                } else {
-                    line = DATA_TYPE.get(type) + " " + line;
+                if(type != ERROR) {
+                    /* 새로운 변수라면 기록하고 자료형 붙임 */
+                    if (type != ERROR && inputVarTable(lhs, type) == true) {
+                        if(type == OBJECT || type == METHOD ) {
+                            String objName = rhs.split(" ")[1].replaceAll("\\(.*", "");
+                            line = objName + " " + line;
+                        } else if(type == ARRAY) {
+                            String objName = rhs.split(" ")[1].replaceAll("\\[.*", "");
+                            line = objName + " " + line;
+                        } else {
+                            line = DATA_TYPE.get(type) + " " + line;
+                        }
+                    }
+                    line += ";";
+                    break;
                 }
             }
-            line += ";";
         } catch (Exception e) {
             // 변수의 중복 선언인 경우
             e.printStackTrace();
@@ -156,6 +164,16 @@ public class VarMatcher {
      */
     private static int chkObject(String rhs) {
         return rhs.trim().matches(objRegex) ? OBJECT : ERROR;
+    }
+
+    /**
+     * Array 객체인지 검사하는 메서드
+     *
+     * @param rhs Array형 선언인지 검사할 변수 선언부 라인의 우변
+     * @return Array면 {@code ARRAY}, 아니면 {@code ERROR}를 리턴
+     */
+    private static int chkArray(String rhs) {
+        return rhs.trim().matches(arrRegex) ? ARRAY : ERROR;
     }
 
     /**
