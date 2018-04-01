@@ -8,4 +8,6 @@
     <dimen name="text_size_small">14sp</dimen>
     <dimen name="text_size_medium">19sp</dimen>
     <dimen name="text_size_large">22sp</dimen>
+
+    <dimen name="button_vertical">60dp</dimen>
 </resources>
