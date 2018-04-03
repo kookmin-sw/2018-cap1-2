@@ -32,7 +32,7 @@ def sortContour(cnts):
 
 def convex():
 
-        img = cv2.imread("../images/ss.jpg")
+        img = cv2.imread("../images/erode.jpg")
         imgray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         ret, thr = cv2.threshold(imgray, 55, 255, 0)
         _, contours, _ = cv2.findContours(thr, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -66,20 +66,16 @@ def convex():
 
         for i in range(len(k)):
             for j in k[i]:
-                leftCheck = j.getX() - j.getW()
-                rightCheck = j.getX() + j.getW()
-                heightCheck = j.getY()
+                heightCheck = j.getCenterY()
                 for p in k[i]:
-                    targetX = p.getX()
-                    targetY = p.getY()
-                    if j.getX() == targetX:
+                    if j.getX() == p.getX():
                         continue
                     else:
-                        if leftCheck <= targetX and targetX <= rightCheck and targetY <= heightCheck:
+                        if p.getX() <= j.getCenterX() and j.getCenterX() <= p.getX() + p.getW() and p.getY() <= heightCheck:
                             tmpW = p.getW()
-                            tmpH = j.getH() + j.getY() - targetY
-                            p.setData(targetX,targetY,tmpW,tmpH)
-                            j.setData(targetX,targetY,tmpW,tmpH)
+                            tmpH = j.getH() + j.getY() - p.getY()
+                            p.setData(p.getX(),p.getY(),tmpW,tmpH)
+                            j.setData(p.getX(),p.getY(),tmpW,tmpH)
                             #cv2.rectangle(img, (targetX, targetY), (targetX +p.getW(), j.getY() + j.getH()
                              #                                        ), (0, 0, 255), 3)
         for i in range(len(k)):
