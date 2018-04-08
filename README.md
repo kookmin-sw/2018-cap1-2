@@ -9,6 +9,12 @@
 하지만 이렇게 작성된 코드들의 대다수가 분실 혹은 문법 미 적용 등의 문제로 실제 코드를 작성할 때 활용되지 못하는 일회성 정보로 사라지기 쉽다. <br>
 이런 문제점을 보완하기 위해 수도 코드로 작성된 코드를 JAVA 코드로 즉각 변환해주는 것으로 수기 코드의 활용 가능성을 높여 **코딩의 공간 및 시간적 제약을 감소**시키고자 한다.<br>
 
+## 1.1 Abstract
+
+Pseudo codes formats with few grammatical constraints are often used when analyzing sudden idea which focusing to the algorithm or under the circumstances that are difficult to use the compute.
+However, most of the code written in this way is likely to disappear into one-off information that cannot be used when writing actual code due to problems such as loss or ungrammaticality. In order to solve this problem, we want to reduce the space and time constraints of coding by increasing the possibility of using the handwritten code by instantly converting the code written in the pseudo code into JAVA code. 
+
+
 ## 2. 소개 영상
 [![image](doc/pic/youtube_thumbnail.JPG)](https://www.youtube.com/watch?v=lW8TSarABVc)
 
