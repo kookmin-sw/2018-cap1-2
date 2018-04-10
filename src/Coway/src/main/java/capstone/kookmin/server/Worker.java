@@ -48,20 +48,34 @@ public class Worker extends Thread {
 
 	@Override
 	public void run() {
+		String receivedImageFilePath = null;
+		String pseudoFilePath = null;
+		String convertedFilePath = null;
+
 		try {
-			String receivedImageFilePath = fileReceive();
+			receivedImageFilePath = fileReceive(); // 소켓으로 사진을 받아옴
 
-			String pseudoFilePath = pythonCall();
-			
-			String convertedFilePath = interpreterCall();
-			
-			/* Logical Error(statusCode: 200) 인 경우만 현재 테스트 중 */
-			send(Packet.LOGICAL_ERROR, new int[] {1}, pseudoFilePath);
-		}
-		catch(Exception e) {
+			pseudoFilePath = pythonCall(); // 받은 사진으로 파이썬 영상처리
+		} catch(Exception e) {
 			e.printStackTrace();
+			/* 소켓 통신 과정 or 영상처리 과정에서 에러 -> System error(statusCode: 300) */
+			try { send(Packet.SYSTEM_ERROR); }
+			catch(IOException ioe) { ioe.printStackTrace(); }
+			return; // 종료
 		}
 
+		try {
+			convertedFilePath = interpreterCall(); // 영상처리로 추출된 텍스트 수도코드
+
+			/* 모든 과정 성공 -> Success(statusCode: 100) */
+			send(Packet.SUCCESS, pseudoFilePath, convertedFilePath);
+		} catch(Exception e) {
+			e.printStackTrace();
+			/* 인터프리팅 과정에서 에러 -> Logical Error(statusCode: 200) */
+			try { send(Packet.LOGICAL_ERROR, new int[] {1}, pseudoFilePath); }
+			catch(IOException ioe) { ioe.printStackTrace(); }
+			return; // 종료
+		}
 	}
 
 	/**
