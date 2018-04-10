@@ -34,7 +34,6 @@ public class Main {
 		System.out.println("완료\n");
 		
 		System.out.println("[ Java 코드 ]");
-		String converteds[] = Loader.load(convertPath);
-		Arrays.stream(converteds).forEach(System.out::println);
+		Arrays.stream(Loader.load(convertPath)).forEach(System.out::println);
 	}
 }

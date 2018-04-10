@@ -1,11 +1,55 @@
-for(i = 0 ~ N) { // First example
+for(i = 0 ~ N) { // First_example
 	print(i)
 }
 
-for(j = 0 -> M) { // Second example
+for(j = 0 -> M) { // Second_example
 	println(j)
 }
 
-for(k -> 0 : N) { // Third example
+for(k -> 0 : N) { // Third_example
 	print(k)
+}
+
+//변수_매칭_테스트
+a = 10
+b = '!'
+c = "Hello World!"
+d = 3.14
+e = new TestClass()
+
+//재_정의_테스트
+a = 0
+b = '?'
+c = "Hell World!"
+d = 3.141592
+e = new TestClass()
+
+//변수_매칭_테스트
+id = 20123087
+operator = '+'
+tt = "ᕙ(•̀‸•́‶)ᕗ"
+kill = .1
+twice = new Twice()
+
+/**************************************************************/
+
+main(String[] args) {
+    hm = new HashMap<String, String>();
+    in = new BufferedReader(new InputStreamReader(System.in))
+    out = new BufferedWriter(new OutputStreamWriter(System.out))
+
+    line[] = in.readLine().split(" ")
+    n = Integer.parseInt(line[0])
+    k = Integer.parseInt(line[1])
+    arr[] = new int[n]
+    p = 2
+
+    st = new StringTokenizer(in.readLine(), " ")
+    for(i = 0 ~ N) {
+   	    arr[i] = Integer.parseInt(st.nextToken())
+    }
+
+    out.write(quickSelect(arr, 0, n-1, k-1)+"")
+    out.close()
+    in.close()
 }
