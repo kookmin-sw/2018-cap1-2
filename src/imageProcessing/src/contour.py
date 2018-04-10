@@ -36,6 +36,8 @@ def convex():
         imgray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         ret, thr = cv2.threshold(imgray, 55, 255, 0)
         _, contours, _ = cv2.findContours(thr, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        bufferX = 558
+        bufferY = 630
 
         cnts, boxes = sortContour(contours)
         k = [[]]
@@ -68,6 +70,7 @@ def convex():
         for i in range(len(k)):
             for j in k[i]:
                 heightCheck = j.getCenterY()
+                index = 0
                 for p in k[i]:
                     if j.getX() == p.getX():
                         continue
@@ -77,12 +80,18 @@ def convex():
                             tmpH = j.getH() + j.getY() - p.getY()
                             p.setData(p.getX(),p.getY(),tmpW,tmpH)
                             j.setData(p.getX(),p.getY(),tmpW,tmpH)
+                            del k[i][index]
+                    index += 1
 
-            cv2.imwrite('../src/'+str(number) + '.jpg',img[k[i][0].getY() : k[i][len(k[i])-1].getY() + k[i][len(k[i])-1].getH(),
-                                                        k[i][0].getX(): k[i][len(k[i]) - 1].getX() + k[i][len(k[i]) - 1].getW()])
+            chars = img[k[0][0].getY() : k[0][0].getY() + k[0][0].getH(),
+                                                        k[0][0].getX(): k[0][0].getX() + k[0][0].getW()]
+
+            chars = cv2.resize(chars,None,fx=0.5,fy=0.5,interpolation=cv2.INTER_AREA)
+            print(chars.shape)
+            cv2.imwrite("../images/resized.jpg",chars)
+
+
             number += 1
-                            #cv2.rectangle(img, (targetX, targetY), (targetX +p.getW(), j.getY() + j.getH()
-                             #                                        ), (0, 0, 255), 3)
         for i in range(len(k)):
             for j in k[i]:
                 cv2.rectangle(img, (j.getX(), j.getY()), (j.getX() + j.getW(), j.getY() + j.getH()), (0, 0, 255), 3)
