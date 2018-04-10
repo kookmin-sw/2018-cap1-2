@@ -22,7 +22,7 @@ public class Worker extends Thread {
 	protected Socket socket;
 	private InetAddress inetAddress;
 
-	private static final String ROOT_DIR = System.getProperty("user.dir") + "/test";
+	private static final String ROOT_DIR = System.getProperty("user.dir") + "/data";
 	private static final String IMG_DIR = ROOT_DIR + "/img";
 	private static final String PSEUDO_DIR = ROOT_DIR + "/pseudo"; //이미지에서 추출된 text 형식의 수도코드가 담길 경로
 	private static final String CONVERTED_DIR = ROOT_DIR + "/converted"; //변환된 .java 파일이 담길 경로
@@ -51,7 +51,7 @@ public class Worker extends Thread {
 	@Override
 	public void run() {
 		String receivedImageFilePath = null;
-		String pseudoFilePath = PSEUDO_DIR + "pseudo.txt"; // 일단 고정
+		String pseudoFilePath = PSEUDO_DIR + "/pseudo.txt"; // 일단 고정
 		String convertedFilePath = null;
 
 		try {
