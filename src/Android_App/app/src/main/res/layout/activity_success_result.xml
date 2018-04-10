@@ -4,8 +4,94 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/coway_background"
     tools:context="capstone2018.coway.SuccessResultActivity">
 
+    <TextView
+        android:id="@+id/successTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_margin="@dimen/small_margin"
+        android:gravity="center"
+        android:text="@string/success_result"
+        android:textSize="@dimen/text_size_large"/>
 
+    <TextView
+        android:id="@+id/pseudo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/vertical_margin"
+        android:layout_marginTop="@dimen/small_margin"
+        android:text="@string/pseudo"
+        android:textSize="@dimen/text_size_medium"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_weight="5"
+        android:layout_margin="@dimen/vertical_margin"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/pseudoTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/small_margin"
+            android:textSize="@dimen/text_size_medium"/>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/java"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/vertical_margin"
+        android:text="@string/java"
+        android:textSize="@dimen/text_size_medium"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_weight="5"
+        android:layout_margin="@dimen/vertical_margin"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/javaTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/small_margin"
+            android:textSize="@dimen/text_size_medium"/>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="bottom"
+        android:layout_marginBottom="@dimen/small_margin"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/backBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/button_vertical"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/small_margin"
+            android:layout_marginEnd="@dimen/small_margin"
+            android:background="@color/coway_main"
+            android:textColor="@color/white"
+            android:text="@string/back" />
+
+        <Button
+            android:id="@+id/okBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/button_vertical"
+            android:layout_weight="1"
+            android:layout_marginEnd="@dimen/small_margin"
+            android:background="@color/coway_main"
+            android:textColor="@color/white"
+            android:text="@string/ok" />
+    </LinearLayout>
 </LinearLayout>

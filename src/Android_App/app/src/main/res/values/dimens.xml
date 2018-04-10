@@ -3,8 +3,11 @@
     <dimen name="horizontal_margin">16dp</dimen>
     <dimen name="vertical_margin">16dp</dimen>
     <dimen name="small_margin">5dp</dimen>
+    <dimen name="vertical_large_margin">30dp</dimen>
 
     <dimen name="text_size_small">14sp</dimen>
     <dimen name="text_size_medium">19sp</dimen>
     <dimen name="text_size_large">22sp</dimen>
+
+    <dimen name="button_vertical">60dp</dimen>
 </resources>
