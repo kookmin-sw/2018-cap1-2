@@ -31,7 +31,10 @@ tt = "ᕙ(•̀‸•́‶)ᕗ"
 kill = .1
 twice = new Twice()
 
-main(String[] args){
+/**************************************************************/
+
+main(String[] args) {
+    hm = new HashMap<String, String>();
     in = new BufferedReader(new InputStreamReader(System.in))
     out = new BufferedWriter(new OutputStreamWriter(System.out))
 

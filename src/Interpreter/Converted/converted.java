@@ -31,7 +31,10 @@ String tt = "ᕙ(•̀‸•́‶)ᕗ";
 double kill = .1;
 Twice twice = new Twice();
 
-main(String[] args){
+/**************************************************************/
+
+main(String[] args) {
+hm = new HashMap<String, String>();
 BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out));
 
