@@ -33,11 +33,15 @@ public class Parser {
 	 * 클래스 파일들의 이름을 직접 읽어서 테이블에 저장
 	 */
 	private void updateTable() {
-		Arrays.stream(new File("src/capstone/kookmin/interpreter/db").listFiles())
-			.map(f-> f.getName().toLowerCase()) //소문자로
-			.map(name-> name.substring(0, name.indexOf(".java")))
-			.filter(name-> !name.contains("Type") && !name.contains("Dao")) //Type, Dao는 제외
-			.forEach(name-> typeTable.add(name));
+//		Arrays.stream(new File("src/capstone/kookmin/interpreter/db").listFiles())
+//			.map(f-> f.getName().toLowerCase()) //소문자로
+//			.map(name-> name.substring(0, name.indexOf(".java")))
+//			.filter(name-> !name.contains("Type") && !name.contains("Dao")) //Type, Dao는 제외
+//			.forEach(name-> typeTable.add(name));
+		/* 우선은 직접 입력 -> 추후 해결책 찾아볼 것 */
+		typeTable.add("for");
+		typeTable.add("print");
+		typeTable.add("println");
 	}
 	
 	/**
@@ -79,8 +83,20 @@ public class Parser {
 	 */
 	private String match(String line) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 		String converted = line;
+
+		/* 변수 타입추론 들어갈 부분 */
+		try{
+			return VarMatcher.convert(line);
+		}
+		catch(Exception e){
+			// 변수 선언 형태가 아니라는 의미
+		}
+
+
+		/* 변수 타입추론할 라인이 아닐 시 일반 예약어 매칭 진행 */
 		line = line.replaceAll(" |\\t", ""); //공백, 탭문자 제거
-		
+
+		/* 특수문자 기준으로 쪼개서 순서대로 typeTable에 있는지 검사 & 매칭 */
 		for(String each : line.split("\\W+")) {
 			if(typeTable.contains(each)) {
 				Type type = DAO.getType(each);

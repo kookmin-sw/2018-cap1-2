@@ -13,14 +13,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import capstone.kookmin.commons.io.Loader;
+import capstone.kookmin.commons.io.Saver;
 import capstone.kookmin.commons.protocol.Packet;
+import capstone.kookmin.interpreter.parse.Parser;
 
 @SuppressWarnings("unused")
 public class Worker extends Thread {
 	protected Socket socket;
 	private InetAddress inetAddress;
 
-	private static final String ROOT_DIR = System.getProperty("user.dir") + "/test";
+	private static final String ROOT_DIR = System.getProperty("user.dir") + "/data";
 	private static final String IMG_DIR = ROOT_DIR + "/img";
 	private static final String PSEUDO_DIR = ROOT_DIR + "/pseudo"; //이미지에서 추출된 text 형식의 수도코드가 담길 경로
 	private static final String CONVERTED_DIR = ROOT_DIR + "/converted"; //변환된 .java 파일이 담길 경로
@@ -48,20 +50,34 @@ public class Worker extends Thread {
 
 	@Override
 	public void run() {
+		String receivedImageFilePath = null;
+		String pseudoFilePath = PSEUDO_DIR + "/pseudo.txt"; // 일단 고정
+		String convertedFilePath = null;
+
 		try {
-			String receivedImageFilePath = fileReceive();
+			receivedImageFilePath = fileReceive(); // 소켓으로 사진을 받아옴
 
-			String pseudoFilePath = pythonCall();
-			
-			String convertedFilePath = interpreterCall();
-			
-			/* Logical Error(statusCode: 200) 인 경우만 현재 테스트 중 */
-			send(Packet.LOGICAL_ERROR, new int[] {1}, pseudoFilePath);
-		}
-		catch(Exception e) {
+			pseudoFilePath = pythonCall(); // 받은 사진으로 파이썬 영상처리
+		} catch(Exception e) {
 			e.printStackTrace();
+			/* 소켓 통신 과정 or 영상처리 과정에서 에러 -> System error(statusCode: 300) */
+			try { send(Packet.SYSTEM_ERROR); }
+			catch(IOException ioe) { ioe.printStackTrace(); }
+			return; // 종료
 		}
 
+		try {
+			convertedFilePath = interpreterCall(pseudoFilePath); // 영상처리로 추출된 텍스트 수도코드
+
+			/* 모든 과정 성공 -> Success(statusCode: 100) */
+			send(Packet.SUCCESS, pseudoFilePath, convertedFilePath);
+		} catch(Exception e) {
+			e.printStackTrace();
+			/* 인터프리팅 과정에서 에러 -> Logical Error(statusCode: 200) */
+			try { send(Packet.LOGICAL_ERROR, new int[] {1}, pseudoFilePath); }
+			catch(IOException ioe) { ioe.printStackTrace(); }
+			return; // 종료
+		}
 	}
 
 	/**
@@ -98,12 +114,17 @@ public class Worker extends Thread {
 		return pseudoPath;
 	}
 
-	private String interpreterCall() throws Exception {
-		String convertedPath = CONVERTED_DIR + "/converted.java";
-		
-		//if(true) throw new Exception("Interpreter Module call is not implemented yet");
-		
-		return convertedPath;
+	private String interpreterCall(String pseudoFilePath) throws Exception {
+		final String convertedPath = CONVERTED_DIR + "/converted.java";
+
+		/* Interpreter 호출 */
+		Parser parser = Parser.getInstance();
+		String converted = parser.parse(pseudoFilePath);
+
+		/* 변환 결과 저장 */
+		Saver.save(convertedPath, converted);
+
+		return convertedPath; // 저장된 파일의 경로 반환
 	}
 	
 	/**
