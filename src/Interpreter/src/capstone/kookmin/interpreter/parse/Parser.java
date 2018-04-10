@@ -33,11 +33,15 @@ public class Parser {
 	 * 클래스 파일들의 이름을 직접 읽어서 테이블에 저장
 	 */
 	private void updateTable() {
-		Arrays.stream(new File("src/capstone/kookmin/interpreter/db").listFiles())
-			.map(f-> f.getName().toLowerCase()) //소문자로
-			.map(name-> name.substring(0, name.indexOf(".java")))
-			.filter(name-> !name.contains("Type") && !name.contains("Dao")) //Type, Dao는 제외
-			.forEach(name-> typeTable.add(name));
+//		Arrays.stream(new File("src/capstone/kookmin/interpreter/db").listFiles())
+//			.map(f-> f.getName().toLowerCase()) //소문자로
+//			.map(name-> name.substring(0, name.indexOf(".java")))
+//			.filter(name-> !name.contains("Type") && !name.contains("Dao")) //Type, Dao는 제외
+//			.forEach(name-> typeTable.add(name));
+		/* 우선은 직접 입력 -> 추후 해결책 찾아볼 것 */
+		typeTable.add("for");
+		typeTable.add("print");
+		typeTable.add("println");
 	}
 	
 	/**
