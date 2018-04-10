@@ -13,7 +13,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import capstone.kookmin.commons.io.Loader;
+import capstone.kookmin.commons.io.Saver;
 import capstone.kookmin.commons.protocol.Packet;
+import capstone.kookmin.interpreter.parse.Parser;
 
 @SuppressWarnings("unused")
 public class Worker extends Thread {
@@ -49,7 +51,7 @@ public class Worker extends Thread {
 	@Override
 	public void run() {
 		String receivedImageFilePath = null;
-		String pseudoFilePath = null;
+		String pseudoFilePath = PSEUDO_DIR + "pseudo.txt"; // 일단 고정
 		String convertedFilePath = null;
 
 		try {
@@ -65,7 +67,7 @@ public class Worker extends Thread {
 		}
 
 		try {
-			convertedFilePath = interpreterCall(); // 영상처리로 추출된 텍스트 수도코드
+			convertedFilePath = interpreterCall(pseudoFilePath); // 영상처리로 추출된 텍스트 수도코드
 
 			/* 모든 과정 성공 -> Success(statusCode: 100) */
 			send(Packet.SUCCESS, pseudoFilePath, convertedFilePath);
@@ -112,12 +114,17 @@ public class Worker extends Thread {
 		return pseudoPath;
 	}
 
-	private String interpreterCall() throws Exception {
-		String convertedPath = CONVERTED_DIR + "/converted.java";
-		
-		//if(true) throw new Exception("Interpreter Module call is not implemented yet");
-		
-		return convertedPath;
+	private String interpreterCall(String pseudoFilePath) throws Exception {
+		final String convertedPath = CONVERTED_DIR + "/converted.java";
+
+		/* Interpreter 호출 */
+		Parser parser = Parser.getInstance();
+		String converted = parser.parse(pseudoFilePath);
+
+		/* 변환 결과 저장 */
+		Saver.save(convertedPath, converted);
+
+		return convertedPath; // 저장된 파일의 경로 반환
 	}
 	
 	/**
