@@ -60,10 +60,11 @@ def convex():
         for i in range(len(k)):
             for j in range(len(k[i])):
                 k[i].sort(key=lambda x :x.getX())
-                cv2.putText(img, "#{}".format(j + 1), (k[i][j].getX() + int(0.5 * k[i][j].getW()) - 20, k[i][j].getY() + int(0.5 * k[i][j].getH())),
-                            cv2.FONT_HERSHEY_SIMPLEX,
-                            3.0, (0, 255, 0), 2)
+               # cv2.putText(img, "#{}".format(j + 1), (k[i][j].getX() + int(0.5 * k[i][j].getW()) - 20, k[i][j].getY() + int(0.5 * k[i][j].getH())),
+                #            cv2.FONT_HERSHEY_SIMPLEX,
+                #            3.0, (0, 255, 0), 2)
 
+        number = 10
         for i in range(len(k)):
             for j in k[i]:
                 heightCheck = j.getCenterY()
@@ -76,6 +77,10 @@ def convex():
                             tmpH = j.getH() + j.getY() - p.getY()
                             p.setData(p.getX(),p.getY(),tmpW,tmpH)
                             j.setData(p.getX(),p.getY(),tmpW,tmpH)
+
+            cv2.imwrite('../src/'+str(number) + '.jpg',img[k[i][0].getY() : k[i][len(k[i])-1].getY() + k[i][len(k[i])-1].getH(),
+                                                        k[i][0].getX(): k[i][len(k[i]) - 1].getX() + k[i][len(k[i]) - 1].getW()])
+            number += 1
                             #cv2.rectangle(img, (targetX, targetY), (targetX +p.getW(), j.getY() + j.getH()
                              #                                        ), (0, 0, 255), 3)
         for i in range(len(k)):
