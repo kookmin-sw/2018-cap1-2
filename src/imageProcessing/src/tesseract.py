@@ -1,13 +1,14 @@
 from pytesseract import *
-import cv2
 from PIL import Image
+import sys
 
-def OCR(img, lang='eng'):
-    im = Image.open(img)
-    text = image_to_string(im, lang = lang)
-    f = open('../result/result.txt','w')
+def OCR(img_src, txt_dst, lang='eng'):
+    img = Image.open(img_src)
+    text = image_to_string(img, lang = lang)
+    f = open(txt_dst, 'w')
     f.write(text)
 
 
 if __name__ == '__main__':
-    OCR('../images/text.png')
+    OCR(sys.argv[1], sys.argv[2])
+
