@@ -2,13 +2,12 @@ from pytesseract import *
 from PIL import Image
 import sys
 
-def OCR(img, path='result',lang='eng'):
-    im = Image.open(img)
-    text = image_to_string(im, lang = lang)
-    f = open('../' + path + '/result.txt','w')
+def OCR(img_src, txt_dst, lang='eng'):
+    img = Image.open(img_src)
+    text = image_to_string(img, lang = lang)
+    f = open(txt_dst, 'w')
     f.write(text)
 
 
 if __name__ == '__main__':
-    PATH = sys.argv[1]
-    OCR('../images/text.png',PATH)
+    OCR(sys.argv[1], sys.argv[2])
