@@ -51,13 +51,14 @@ public class Worker extends Thread {
 	@Override
 	public void run() {
 		String receivedImageFilePath = null;
-		String pseudoFilePath = PSEUDO_DIR + "/pseudo.txt"; // 일단 고정
+		String pseudoFilePath = null;
 		String convertedFilePath = null;
 
 		try {
 			receivedImageFilePath = fileReceive(); // 소켓으로 사진을 받아옴
 
-			pseudoFilePath = pythonCall(); // 받은 사진으로 파이썬 영상처리
+			pseudoFilePath = pythonCall(receivedImageFilePath); // 받은 사진으로 파이썬 영상처리
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 			/* 소켓 통신 과정 or 영상처리 과정에서 에러 -> System error(statusCode: 300) */
@@ -106,16 +107,19 @@ public class Worker extends Thread {
 		return path;
 	}
 
-	private String pythonCall() throws Exception {
-		String pseudoPath = PSEUDO_DIR + "/pseudo.txt";
+	private String pythonCall(String receivedImageFilePath) throws Exception {
+		String pseudoPath = PSEUDO_DIR + "/pseudo_" + generateName();
 		
-		//if(true) throw new Exception("Python Module call is not implemented yet");
+		String cmd[] = {"bash", "-c", "sh bin/tesseract.sh " + receivedImageFilePath + " " + pseudoPath};
+		
+		Process proc = Runtime.getRuntime().exec(cmd);
+		proc.waitFor();
 
 		return pseudoPath;
 	}
 
 	private String interpreterCall(String pseudoFilePath) throws Exception {
-		final String convertedPath = CONVERTED_DIR + "/converted.java";
+		final String convertedPath = CONVERTED_DIR + "converted_" + generateName() + ".java";
 
 		/* Interpreter 호출 */
 		Parser parser = Parser.getInstance();
