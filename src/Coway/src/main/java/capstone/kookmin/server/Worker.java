@@ -56,8 +56,10 @@ public class Worker extends Thread {
 
 		try {
 			receivedImageFilePath = fileReceive(); // 소켓으로 사진을 받아옴
+			System.out.println("receivedImageFilePath: " + receivedImageFilePath);
 
 			pseudoFilePath = pythonCall(receivedImageFilePath); // 받은 사진으로 파이썬 영상처리
+			System.out.println("pseudoFilePath: " + pseudoFilePath);
 			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -69,6 +71,7 @@ public class Worker extends Thread {
 
 		try {
 			convertedFilePath = interpreterCall(pseudoFilePath); // 영상처리로 추출된 텍스트 수도코드
+			System.out.println("convertedFilePath: " + convertedFilePath);
 
 			/* 모든 과정 성공 -> Success(statusCode: 100) */
 			send(Packet.SUCCESS, pseudoFilePath, convertedFilePath);
@@ -119,7 +122,7 @@ public class Worker extends Thread {
 	}
 
 	private String interpreterCall(String pseudoFilePath) throws Exception {
-		final String convertedPath = CONVERTED_DIR + "converted_" + generateName() + ".java";
+		final String convertedPath = CONVERTED_DIR + "/converted_" + generateName() + ".java";
 
 		/* Interpreter 호출 */
 		Parser parser = Parser.getInstance();
