@@ -1,3 +1,5 @@
+[![Englsh](https://img.shields.io/badge/language-English-orange.svg)](README.md) [![Korean](https://img.shields.io/badge/language-Korean-blue.svg)](README_KR.md)
+
 # Interpreter
 정규식 기반의 수도코드 인터프리터 모듈
 

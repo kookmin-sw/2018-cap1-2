@@ -1,3 +1,5 @@
+[![Englsh](https://img.shields.io/badge/language-English-orange.svg)](README.md) [![Korean](https://img.shields.io/badge/language-Korean-blue.svg)](README_KR.md)
+
 # Interpreter
 Regex based Pseudo Code Interpreter Module
 
