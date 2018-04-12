@@ -9,7 +9,9 @@ import capstone.kookmin.interpreter.parse.Parser;
 
 public class Main {
 	public static void main(String[] args) throws Exception {
-		args = new String[] { "Pseudo/pseudo.txt", "Converted/converted.java" };
+		if(args == null || args.length != 2) {
+			args = new String[] { "Pseudo/pseudo.txt", "Converted/converted.java" };
+		}
 
 		String rawPath = args[0];
 		String rawCodes[] = Loader.load(rawPath);
