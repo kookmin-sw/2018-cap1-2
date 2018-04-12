@@ -23,17 +23,17 @@ public class Main {
 
 		Parser parser = Parser.getInstance();
 		
-		System.out.println("[ Pseudo 코드] ");
+		System.out.println("==========================[ Pseudo 코드 ]==========================");
 		Arrays.stream(rawCodes).forEach(System.out::println);
 		
-		System.out.print("\n변환 시작 ... ");
+		System.out.println("\n==========================[ 변환 시작 ]==========================");
 		
 		String converted = parser.parse(rawPath);
 		Saver.save(convertPath, converted);
 		
-		System.out.println("완료\n");
-		
-		System.out.println("[ Java 코드 ]");
+		System.out.println("변환 완료\n");
+
+		System.out.println("==========================[ Java 코드 ]==========================");
 		Arrays.stream(Loader.load(convertPath)).forEach(System.out::println);
 	}
 }

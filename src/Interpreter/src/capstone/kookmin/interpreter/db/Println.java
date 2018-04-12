@@ -21,6 +21,8 @@ public class Println extends Type {
 	public String convert(String pseudoLine) {
 		String lines = pseudoLine.replaceAll(" |\\t", ""); //공백 제거
 		StringBuilder converted = new StringBuilder();
+
+		System.out.printf("   => 예약어(%s) 정규식 매칭 시작\n", "print");
 		
 		for(Pair<String, String> each : matchedFormat) {
 			if(lines.matches(each.format) == false) continue; //정규식 매칭 실패시 건너뜀
@@ -30,6 +32,7 @@ public class Println extends Type {
 					.filter(x-> x.length() > 0)
 					.collect(Collectors.toList()); //변수들만 걸러냄
 			String vars[] = varList.toArray(new String[varList.size()]);
+			System.out.printf("   => 라인에서 변수들만 추출: %s\n", Arrays.toString(vars));
 			
 			/*
 			 * vars[0] = i
@@ -44,7 +47,9 @@ public class Println extends Type {
 			
 			// 나머지 부분들 이어붙여주기
 			for(i=endOfVarIdx+1; i<vars.length; i++) converted.append(vars[i]);
-			
+
+			System.out.printf("   => 변수들을 자바코드 포맷에 채워서 완성: %s\n", converted.toString());
+
 			break; //매칭 & 변환 성공 시 종료
 		}
 		

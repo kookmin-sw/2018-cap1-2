@@ -84,12 +84,18 @@ public class VarMatcher {
         String rhs = line.split("=")[1].trim(); // 변수값
         int type = ERROR;
 
+        System.out.printf("[변수추론]\n => 좌변(%s) 우변(%s)", lhs, rhs);
+
         try {
+            boolean matched = false;
             for(Method checker : CHECK_METHOD) {
                 type = (int) checker.invoke(VAR_MATCHER_CLASS, rhs);
                 if(type != ERROR) {
+                    matched = true;
+                    System.out.printf(" => 정규식으로 추론된 우변의 타입 (%s)\n", DATA_TYPE.get(type));
                     /* 새로운 변수라면 기록하고 자료형 붙임 */
                     if (type != ERROR && inputVarTable(lhs, type) == true) {
+                        System.out.print(" => 새로운 변수");
                         if(type == OBJECT || type == METHOD ) {
                             String objName = rhs.split(" ")[1].replaceAll("\\(.*", "");
                             line = objName + " " + line;
@@ -100,14 +106,21 @@ public class VarMatcher {
                             line = DATA_TYPE.get(type) + " " + line;
                         }
                     }
+                    else {
+                        System.out.print(" => 이미 선언되었던 변수");
+                    }
+                    System.out.println(" (변수 선언 기록 테이블 = " + VAR_TABLE + ")");
                     line += ";";
                     break;
                 }
             }
+            System.out.printf(" => %s\n", matched ? "매칭 성공" : "추론 불가능한 타입");
         } catch (Exception e) {
             // 변수의 중복 선언인 경우
             e.printStackTrace();
         }
+
+        System.out.println(" => 매칭 종료 :: " + line + "\n");
 
         return line;
     }

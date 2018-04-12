@@ -84,6 +84,8 @@ public class Parser {
 	private String match(String line) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 		String converted = line;
 
+		System.out.println("매칭 대상 라인: " + line);
+
 		/* 변수 타입추론 들어갈 부분 */
 		try{
 			return VarMatcher.convert(line);
@@ -92,18 +94,24 @@ public class Parser {
 			// 변수 선언 형태가 아니라는 의미
 		}
 
-
 		/* 변수 타입추론할 라인이 아닐 시 일반 예약어 매칭 진행 */
 		line = line.replaceAll(" |\\t", ""); //공백, 탭문자 제거
+		String splitted[] = line.split("\\W+");
+
+		System.out.println("[예약어매칭]");
+		System.out.printf(" => 공백 제거: %s\n", line);
+		System.out.printf(" => 특수문자 기준 분리: %s\n", Arrays.toString(splitted));
 
 		/* 특수문자 기준으로 쪼개서 순서대로 typeTable에 있는지 검사 & 매칭 */
-		for(String each : line.split("\\W+")) {
+		for(String each : splitted) {
+			System.out.printf("  => 검사할 단어: %s, 예약어 화이트리스트 = %s\n", each, typeTable);
 			if(typeTable.contains(each)) {
 				Type type = DAO.getType(each);
 				converted = type.convert(line);
 				break;
 			}
 		}
+		System.out.println(" => 예약어 매칭 종료\n");
 		
 		return converted;
 	}
