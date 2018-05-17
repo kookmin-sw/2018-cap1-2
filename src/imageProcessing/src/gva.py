@@ -12,7 +12,7 @@ from google.cloud.vision import types
 
 #GVA.text_detection()
 
-APPKEY = 
+APPKEY =
 ENDPOINT_URL = "https://vision.googleapis.com/v1/images:annotate"
 RESULTS_DIR = "jsons"
 makedirs(RESULTS_DIR,exist_ok=True)
