@@ -1,11 +1,6 @@
-import cv2
 import numpy as np
-import matplotlib.pyplot as plt
-from PIL import Image
-import pytesseract as pyt
-import argparse
 import cv2
-import os
+
 
 
 """
@@ -48,10 +43,10 @@ def process():
 
 	ret1,finalImg = cv2.threshold(blur,thresholder,whiteValue,cv2.THRESH_BINARY)
 
-	cv2.imwrite('../images/ss.jpg',finalImg)
+	cv2.imwrite('../images/ss.png', finalImg)
 
 
-    #테저렉트 실행(인식 불량)
+
 
 process()
 

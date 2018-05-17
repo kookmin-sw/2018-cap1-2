@@ -1,3 +1,36 @@
-for(i -> N){
-println(i)
-}
+
+for (i-n)f
+Println CT)
+23
+
+or (14h)
+Println (i)
+21
+
+Println (1)
+12
+
+or (i+h)
+Println (i)
+21
+
+Println (i)
+12
+
+or (ih)
+Println (i)
+20
+
+PrintIn (i)
+12
+
+or (14h)
+PrintIn (i)
+21
+
+rint, In(1
+11
+
+or (ih)
+Print (i)
+18

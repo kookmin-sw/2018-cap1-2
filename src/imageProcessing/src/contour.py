@@ -1,5 +1,4 @@
 import cv2
-import sys
 import numpy as np
 import cntClass
 
@@ -33,13 +32,10 @@ def sortContour(cnts):
 
 def convex():
 
-        img = cv2.imread("../images/erode.jpg")
+        img = cv2.imread("../images/erode.png")
         imgray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         ret, thr = cv2.threshold(imgray, 55, 255, 0)
         _, contours, _ = cv2.findContours(thr, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        bufferX = 558
-        bufferY = 630
-
         cnts, boxes = sortContour(contours)
         k = [[]]
         corY = boxes[0][1]
@@ -58,7 +54,7 @@ def convex():
                 tmp.setLine(line)
                 k.append([])
             k[tmp.getLine() - 1].append(tmp)
-            #cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 3)
+            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 3)
 
         for i in range(len(k)):
             for j in range(len(k[i])):
@@ -67,6 +63,7 @@ def convex():
                 #            cv2.FONT_HERSHEY_SIMPLEX,
                 #            3.0, (0, 255, 0), 2)
 
+        #cv2.imwrite("../chars/kk.jpg",img)
         number = 1
         for i in range(len(k)): #i is number of total lines
             for j in k[i]: #j is single char of each line
@@ -84,45 +81,8 @@ def convex():
                             del k[i][index]
                     index += 1
 
-            number = 1
-            blank = np.zeros((384,512,3),np.uint8)
-            color = tuple(reversed((0,0,0)))
-            blank[:] = color
-        tmp = img
-        y = 9/k[0][1].getH()
-        x = y
-        tmp = cv2.resize(tmp,None, fx=(x), fy=(y), interpolation=cv2.INTER_AREA)
-           # blank[ int(256-0.5*x) : int(256+0.5*x),int(192-0.5*y): int(192+0.5*y)] = tmp
-            #tmp = cv2.copyMakeBorder(tmp, int(225-0.5*y), int(225-0.5*y), int(400-0.5*x), int(400-0.5*x), cv2.BORDER_CONSTANT)
-        tmp = cv2.bitwise_not(tmp)
-        cv2.imwrite("../images/" + str(number + 20000) + ".jpg", tmp)
-        print(x * k[0][0].getW())
-        print(y * k[0][1].getH())
-            #constant = cv2.copyMakeBorder(tmp, 384-int(0.5*y), 384-int(0.5*y), 512-int(0.5*x), 512-int(0.5*x), cv2.BORDER_CONSTANT)
-            #cv2.imwrite("../images/" + str(number+10000) + ".jpg", constant)
+        return k, thr
 
-      #  for i in range(len(k)):
-        #    for j in k[i]:
-                #number = number + 1
-               # chars= img[k[i][0].getY(): k[i][len(k[i]) - 1].getY() + k[i][len(k[i]) - 1].getH()
-               #     , k[i][0].getX(): k[i][len(k[i]) - 1].getX() + k[i][len(k[i]) - 1].getW()]
-               # chars = cv2.resize(chars, None, fx=y, fy=y, interpolation=cv2.INTER_AREA)
-                #blank[int(256 - 0.5 * x): int(256 + 0.5 * x), int(192 - 0.5 * y): int(192 + 0.5 * y)] = chars
-               # constant = blank
-               # constant = cv2.copyMakeBorder(chars, 10, 10, 10, 10, cv2.BORDER_CONSTANT)
-               # constant = cv2.bitwise_not(constant)
-               # cv2.imwrite("../images/"+str(number)+".jpg",constant)
-
-
-              #  cv2.rectangle(img, (j.getX(), j.getY()), (j.getX() + j.getW(), j.getY() + j.getH()), (0, 0, 255), 3)
-          #  cv2.imwrite("../images/" + str(number) + ".jpg", img[k[i][0].getY(): k[i][len(k[i]) - 1].getY() + k[i][len(k[i])-1].getH()
-                      #  , k[i][0].getX(): k[i][len(k[i])-1].getX() + k[i][len(k[i])-1].getW()])
-
-
-
-
-
-        cv2.imwrite("../images/contours.jpg", img)
 
 
 
