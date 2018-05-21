@@ -23,3 +23,11 @@ char operator = '+';
 String tt = "ᕙ(•̀‸•́‶)ᕗ";
 double kill = .1;
 Twice twice = new Twice();
+
+int i = 0;
+int j = 10;
+for(int k=0;k<=N;k++){
+i = i + j;
+j = i;
+line = br.readLine();
+}

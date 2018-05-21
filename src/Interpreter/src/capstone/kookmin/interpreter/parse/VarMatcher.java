@@ -45,17 +45,19 @@ public class VarMatcher {
     private static final int CHAR = 0x07; // g = 'c'
     private static final int STRING = 0x08; // h = "str"
     private static final int ARRAY = 0x09; // i = new int[n];
+    private static final int FORCE = 0x10; // 강제 매칭
     private static final int ERROR = -1; // 변환 불가능한 상태
     private static final int INIT = 0; // 아무것도 하지 않은 초기 상태
 
-    private static final String varRegex = "\\s*^[_a-zA-Z_$][a-zA-Z_$0-9]*(\\[\\])?\\s*=\\s*.*"; // var = ,* 또는 var[] = .* 형태
+    private static final String varRegex = "\\s*^[_a-zA-Z_$][a-zA-Z_$0-9]*(\\[\\])?\\s*=.*"; // var = ,* 또는 var[] = .* 형태
     private static final String strRegex = "\".*\"";
     private static final String fltRegex = ""; // 안쓸듯
     private static final String dblRegex = "\\d*\\.\\d*"; //"(\\d+(\\.\\d+)?)|(\\.\\d+)"
     private static final String objRegex = "new [_a-zA-Z_$][a-zA-Z_$0-9]*\\(.*\\)";
-    private static final String mtdRegex = ""; // method call
+    private static final String mtdRegex = "[^new].*\\(.*\\)"; // method call
     private static final String chrRegex = "'.'";
     private static final String arrRegex = "new [_a-zA-Z_$][a-zA-Z_$0-9]*\\[.*\\]"; // new int[k]
+    private static final String frcRegex = ".*";
 
     /**
      * 무조건 (var = ?) 형식이어야 한다.
@@ -80,6 +82,8 @@ public class VarMatcher {
             throw new Exception("Not variable declaration format");
         }
 
+        // 이 아래로 내려왔으면 어쨌든 변수 선언이다.
+
         String lhs = line.split("=")[0].trim(); // 변수명
         String rhs = line.split("=")[1].trim(); // 변수값
         int type = ERROR;
@@ -90,27 +94,29 @@ public class VarMatcher {
             boolean matched = false;
             for(Method checker : CHECK_METHOD) {
                 type = (int) checker.invoke(VAR_MATCHER_CLASS, rhs);
+                System.out.printf("rhs = %s\ttype = %d\n", rhs, type);
+
                 if(type != ERROR) {
                     matched = true;
                     System.out.printf(" => 정규식으로 추론된 우변의 타입 (%s)\n", DATA_TYPE.get(type));
                     /* 새로운 변수라면 기록하고 자료형 붙임 */
                     if (type != ERROR && inputVarTable(lhs, type) == true) {
                         System.out.print(" => 새로운 변수");
-                        if(type == OBJECT || type == METHOD ) {
+                        if(type == OBJECT) {
                             String objName = rhs.split(" ")[1].replaceAll("\\(.*", "");
                             line = objName + " " + line;
+                        } else if(type == METHOD) {
+                            // 원본 형식 그대로를 반환
                         } else if(type == ARRAY) {
                             String objName = rhs.split(" ")[1].replaceAll("\\[.*", "");
                             line = objName + " " + line;
                         } else {
                             line = DATA_TYPE.get(type) + " " + line;
                         }
-                    }
-                    else {
+                    } else {
                         System.out.print(" => 이미 선언되었던 변수");
                     }
                     System.out.println(" (변수 선언 기록 테이블 = " + VAR_TABLE + ")");
-                    line += ";";
                     break;
                 }
             }
@@ -118,6 +124,10 @@ public class VarMatcher {
         } catch (Exception e) {
             // 변수의 중복 선언인 경우
             e.printStackTrace();
+        }
+
+        if(line.endsWith(";") == false) {
+            line = line + ";";
         }
 
         System.out.println(" => 매칭 종료 :: " + line + "\n");
@@ -190,6 +200,14 @@ public class VarMatcher {
     }
 
     /**
+     * Method 인지 검사하는 메서드
+     *
+     * @param rhs Method 선언인지 검사할 변수 선언부 라인의 우변
+     * @return Method면 {@code Method}, 아니면 {@code ERROR}를 리턴
+     */
+    private static int chkMethod(String rhs) { return rhs.trim().matches(mtdRegex) ? METHOD : ERROR; }
+
+    /**
      * 처음 선언하는 변수인지 여부를 기록 및 판단하는 메서드.
      * 첫 선언이면 {@code VAR_TABLE}에 기록한다.
      * 중복 선언인 경우 Exception 발생
@@ -235,7 +253,7 @@ public class VarMatcher {
     }
 
     public static void main(String[] args) throws Exception {
-        String vars[] = {"a = 10", "b = '!'", "c = \"Hello World!\"", "d = 3.14", "e = new MyClass()"};
+        String vars[] = { "i = i + j" };
         System.out.println("\n변환 전");
         Arrays.stream(vars).forEach(System.out::println);
         System.out.println("\n변환 후");
