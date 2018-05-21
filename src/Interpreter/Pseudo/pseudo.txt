@@ -23,3 +23,11 @@ operator = '+'
 tt = "ᕙ(•̀‸•́‶)ᕗ"
 kill = .1
 twice = new Twice()
+
+i = 0
+j = 10
+for(k = 0 ~ N) {
+    i = i + j
+    j = i
+    line = br.readLine()
+}
