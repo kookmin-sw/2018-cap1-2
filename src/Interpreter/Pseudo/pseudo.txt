@@ -1,33 +1,10 @@
-for(i = 0 ~ N) {
-	print(i)
-	println("값:"+i)
-}
-
-//신규변수_매칭_테스트
-a = 10
-b = '!'
-c = "Hello World!"
-d = 3.14
-e = new TestClass()
-
-//기존변수_재정의_테스트
 a = 0
-b = '?'
-c = "Hell World!"
-d = 3.141592
-e = new TestClass()
+b = 1
+k = 100
+if (a < k){
+for (n = 0 ~ 10){
+a = a+b
+b=a
 
-//신규변수_매칭_테스트
-id = 20123087
-operator = '+'
-tt = "ᕙ(•̀‸•́‶)ᕗ"
-kill = .1
-twice = new Twice()
-
-i = 0
-j = 10
-for(k = 0 ~ N) {
-    i = i + j
-    j = i
-    line = br.readLine()
+}
 }
