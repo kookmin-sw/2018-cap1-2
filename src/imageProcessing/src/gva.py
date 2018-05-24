@@ -5,21 +5,22 @@ from os.path import join, basename
 import json
 import requests
 from base64 import b64encode
-import cv2
+import sys
 
-from google.cloud import vision as GVA
-from google.cloud.vision import types
+#from google.cloud import vision as GVA
+#from google.cloud.vision import types
 
-GVA.text_detection()
+#GVA.text_detection()
 
-APPKEY = "AIzaSyAT9MG1F9fkUOhNTP0JwvFtsLKDAQOz4C8"
+APPKEY =
 ENDPOINT_URL = "https://vision.googleapis.com/v1/images:annotate"
 RESULTS_DIR = "jsons"
 makedirs(RESULTS_DIR,exist_ok=True)
-ROOT = "/root/PycharmProjects/2018-cap1-2/src/imageProcessing/"
+ROOT = "../tmp"
 
+pixel = 5
 
-def make_image_data_list(folder):
+def make_image_data_list(input):
     """
     image_filenames is a list of filename strings
     Returns a list of dicts formatted as the Vision API
@@ -27,44 +28,45 @@ def make_image_data_list(folder):
     """
     #print(folder)
     img_requests = []
-    imgPath = ROOT + str(folder[0])
-    imgs = os.listdir(imgPath)
-    imgs.sort()
 
-    for imgname in imgs:
-        with open(imgPath + "/" +imgname, 'rb') as f:
-                 ctxt = b64encode(f.read()).decode()
-                 img_requests.append({
+
+    with open(input, 'rb') as f:
+            ctxt = b64encode(f.read()).decode()
+            img_requests.append({
                      'image': {'content': ctxt},
                      'features': [{
-                            'type': 'TEXT_DETECTION',
+                            'type': 'DOCUMENT_TEXT_DETECTION',
                            'maxResults': 1
                         }]
              })
     return img_requests
 
-def make_image_data(image_filenames):
+def make_image_data(input):
     """Returns the image data lists as bytes"""
-    imgdict = make_image_data_list(image_filenames)
+    imgdict = make_image_data_list(input)
     return json.dumps({"requests": imgdict }).encode()
 
 
-def request_ocr(api_key, image_filenames):
+def request_ocr(api_key,input):
     response = requests.post(ENDPOINT_URL,
-                             data=make_image_data(image_filenames),
+                             data=make_image_data(input),
                              params={'key': api_key},
                              headers={'Content-Type': 'application/json'})
     return response
 
 
 if __name__ == '__main__':
-    api_key, *folder = argv[1:]
+    input_path = sys.argv[1]
+    output_path = sys.argv[2]
+    result = open(output_path, 'w')
+    api_key= APPKEY
+    folder = input_path
     if not api_key or not folder:
         print("""
             Please supply an api key, then one or more image filenames
             $ python cloudvisreq.py api_key image1.jpg image2.png""")
     else:
-        response = request_ocr(api_key, folder)
+        response = request_ocr(api_key,input_path)
         if response.status_code != 200 or response.json().get('error'):
             print(response.text)
         else:
@@ -74,13 +76,17 @@ if __name__ == '__main__':
                 jpath = join(RESULTS_DIR, basename(imgname) + '.json')
                 with open(jpath, 'w') as f:
                     datatxt = json.dumps(resp, indent=2)
-                    print("Wrote", len(datatxt), "bytes to", jpath)
+                    #print("Wrote", len(datatxt), "bytes to", jpath)
                     f.write(datatxt)
 
                 # print the plaintext to screen for convenience
-                print("---------------------------------------------")
+                #print("---------------------------------------------")
                 t = resp['textAnnotations'][0]
-                print("    Bounding Polygon:")
-                print(t['boundingPoly'])
-                print("    Text:")
-                print(t['description'])
+                #print("    Bounding Polygon:")
+                #print(t['boundingPoly'])
+                #print("    Text:")
+                #print(t['description'])
+                #ss = t['description']
+                result.write(t['description'])
+                #result.write(str(len(ss))+'\n')
+                #pixel = pixel + 1

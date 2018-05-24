@@ -1,3 +1,7 @@
-for(i -> N){
-println(i)
-}
+a=0
+b = "Coway"
+C = 3.14
+a=1
+b= "Project "
+C= 3.1415
+d = new testClass()
