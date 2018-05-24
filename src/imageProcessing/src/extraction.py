@@ -1,10 +1,11 @@
+from sys import argv
+import sys
 import cv2
 import numpy as np
-import cntClass
 import os
-ROOT = "/home/shinjong93/바탕화면/pycharm/capstone/src/imageProcessing/new_images"
+ROOT = "../new_images"
 
-def extract():
+def extract(input_path,output_path):
     imageList = [[]]
     result = []
 
@@ -15,20 +16,17 @@ def extract():
     color = tuple(reversed((0, 0, 0)))
     blank[:] = color
 
-    imgPath = ROOT  # + str(folder[0])
-    imgs = os.listdir(imgPath)
-    imgs.sort()
 
-    for imgname in imgs:
-        tmp = cv2.imread("../converted/"+imgname)
-        x = 1600 / tmp.shape[1]
-        y = 900 / tmp.shape[0]
-        print(x)
-        print(y)
-        tmp = cv2.resize(tmp, None, fx=(x), fy=(y), interpolation=cv2.INTER_AREA)
-        tmp = cv2.bitwise_not(tmp)
-        result.append(tmp)
-        cv2.imwrite("../tmp/" + imgname, tmp)
+    tmp = cv2.imread(input_path)
+    x = 1600 / tmp.shape[1]
+    y = 900 / tmp.shape[0]
+    print(x)
+    print(y)
+    tmp = cv2.resize(tmp, None, fx=(x), fy=(y), interpolation=cv2.INTER_AREA)
+    tmp = cv2.bitwise_not(tmp)
+    result.append(tmp)
+    cv2.imwrite(output_path, tmp)
+
 
 
 # for i in range(1,11):
@@ -45,5 +43,7 @@ def extract():
 
 
 
-
-extract()
+if __name__ == "__main__":
+    input_path = sys.argv[1]
+    output_path = sys.argv[2]
+    extract(input_path,output_path)
