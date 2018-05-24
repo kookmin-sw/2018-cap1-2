@@ -12,11 +12,11 @@ from google.cloud.vision import types
 
 #GVA.text_detection()
 
-APPKEY =
+APPKEY = "AIzaSyC90yKoswLGpPFMq0D0ni_n0Oh6Ty0fNqc"
 ENDPOINT_URL = "https://vision.googleapis.com/v1/images:annotate"
 RESULTS_DIR = "jsons"
 makedirs(RESULTS_DIR,exist_ok=True)
-ROOT = "/root/PycharmProjects/2018-cap1-2/src/imageProcessing/chars"
+ROOT = "/root/PycharmProjects/2018-cap1-2/src/imageProcessing/tmp"
 result = open("../result/result.txt",'w')
 pixel = 5
 
@@ -35,10 +35,11 @@ def make_image_data_list():
     for imgname in imgs:
         with open(imgPath + "/" +imgname, 'rb') as f:
                  ctxt = b64encode(f.read()).decode()
+                 print(ctxt)
                  img_requests.append({
                      'image': {'content': ctxt},
                      'features': [{
-                            'type': 'TEXT_DETECTION',
+                            'type': 'DOCUMENT_TEXT_DETECTION',
                            'maxResults': 1
                         }]
              })
@@ -48,7 +49,7 @@ def make_image_data_list():
 def make_image_data():
     """Returns the image data lists as bytes"""
     imgdict = make_image_data_list()
-    print("make_image_data")
+    print(imgdict)
     return json.dumps({"requests": imgdict }).encode()
 
 
@@ -89,9 +90,7 @@ if __name__ == '__main__':
                 print(t['boundingPoly'])
                 print("    Text:")
                 print(t['description'])
-               # result.write("---------------" + str(pixel) + " pixel\n")
-                result.write("\n")
-                ss = t['description']
+                #ss = t['description']
                 result.write(t['description'])
-                result.write(str(len(ss))+'\n')
-                pixel = pixel + 1
+                #result.write(str(len(ss))+'\n')
+                #pixel = pixel + 1
