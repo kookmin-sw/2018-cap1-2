@@ -7,8 +7,8 @@ import requests
 from base64 import b64encode
 import sys
 
-from google.cloud import vision as GVA
-from google.cloud.vision import types
+#from google.cloud import vision as GVA
+#from google.cloud.vision import types
 
 #GVA.text_detection()
 
