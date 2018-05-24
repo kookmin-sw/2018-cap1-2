@@ -1,7 +1,5 @@
 package capstone.kookmin.interpreter.db;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * 예약어에 맞는 Type 클래스를 가져오기 위한 Dao
  * @author occidere
@@ -32,6 +30,7 @@ public class Dao {
 	 * @return Java Class Naming Convention에 맞게 변경된 예약어
 	 */
 	private String toClassName(String typeName) {
-		return StringUtils.capitalize(typeName);
+		char first = (char) (typeName.charAt(0) - 32);
+		return first + typeName.substring(1, typeName.length());
 	}
 }
