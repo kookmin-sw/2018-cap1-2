@@ -51,6 +51,8 @@ public class Parser {
 	 * @throws IOException 수도코드 텍스트 파일 로드 과정에서 발생
 	 */
 	public String parse(String filePath) throws IOException {
+		VarMatcher.clear(); // 이미 선언된 변수 기록 테이블 초기화 필수
+		
 		String rawCodes[] = null, cvt;
 		StringBuilder converted = new StringBuilder();
 		
