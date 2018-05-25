@@ -134,6 +134,13 @@ public class VarMatcher {
 
         return line;
     }
+    
+    /**
+     * 이미 선언된 변수들을 저장한 테이블을 비움
+     */
+    public static void clear() {
+    	VAR_TABLE.clear();
+    }
 
     /**
      * 정수 자료형인지 검사하는 메서드
