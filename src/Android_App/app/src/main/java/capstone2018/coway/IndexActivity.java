@@ -99,7 +99,7 @@ public class IndexActivity extends AppCompatActivity {
         }
 
         private void receive() throws IOException, ClassNotFoundException{
-            Log.d(SocketTAG,"receive packet");
+            Log.d(SocketTAG,"try to receive packet");
             input = new ObjectInputStream(socket.getInputStream());
 
             packet = (Packet)input.readObject();
@@ -175,7 +175,7 @@ public class IndexActivity extends AppCompatActivity {
 
             try{
                 SocketAddress socketAddress = new InetSocketAddress(ip,port);
-                int timeout = 3000;
+                int timeout = 30000;
                 socket = new Socket();
                 socket.setSoTimeout(timeout);
 

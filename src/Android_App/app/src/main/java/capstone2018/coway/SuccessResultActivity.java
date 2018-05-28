@@ -62,6 +62,7 @@ public class SuccessResultActivity extends AppCompatActivity implements View.OnC
     private void setTextView(TextView textView, String [] strings){
         for (int i =0; i < strings.length; i++){
             textView.append(strings[i]);
+            textView.append(System.getProperty("line.separator"));
         }
     }
 
