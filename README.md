@@ -63,25 +63,3 @@ However, most of the code written in this way is likely to disappear into one-of
 * Email:starec6230@naver.com
 ````
 
-### 4. 사용법
-
-소스코드 제출 시 설치법 및 사용법 작성
-
-**markdown example**
-```markdown example
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
