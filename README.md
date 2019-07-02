@@ -45,7 +45,7 @@ However, most of the code written in this way is likely to disappear into one-of
 
 ## 이성준
 
-<img src="https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAMAAwDuAAgAAQAAAAAAAA9MAAAAJDcxMWQxNmY0LTAxNWItNDE4NS1hYTliLWZiZjAxYzJlMjE5ZA.bin" width="20%">
+<img src="https://avatars2.githubusercontent.com/u/20942871" width="20%">
 
 ````
 * 학번: 20123087
