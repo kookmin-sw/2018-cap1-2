@@ -13,6 +13,7 @@
 
 Pseudo codes formats with few grammatical constraints are often used when analyzing sudden idea which focusing to the algorithm or under the circumstances that are difficult to use the compute.
 However, most of the code written in this way is likely to disappear into one-off information that cannot be used when writing actual code due to problems such as loss or ungrammaticality. In order to solve this problem, we want to reduce the space and time constraints of coding by increasing the possibility of using the handwritten code by instantly converting the code written in the pseudo code into JAVA code. 
+Are you happy? Yes I'm happy!!!
 
 
 ## 2. 소개 영상
