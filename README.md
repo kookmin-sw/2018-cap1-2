@@ -56,6 +56,7 @@ Are you happy? Yes I'm happy!!!
 ````
 
 ## 최인정
+
 <img src=./doc/pic/inchoi.jpg width="20%" height="20%">
 
 ````
