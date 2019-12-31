@@ -2,6 +2,14 @@
 
 국민대학교 소프트웨어학부 캡스톤 프로젝트 2조
 
+<br>
+
+> 모두 노예가 된 것을 축하합니다!
+>
+> 다들 칼퇴길만 걷자
+
+<br>
+
 ## 1. 프로젝트 소개
 
 본 프로젝트는 **수기로 작성된 수도 코드를 사진으로 찍어 이를 텍스트 형태의 JAVA 코드로 변환**해 주는 것을 목표로 한다.<br>
@@ -52,7 +60,11 @@ Are you happy? Yes I'm happy!!!
 * 학번: 20123087
 * 역할: Interpreter 개발, Server 개발, 예약어 사전 구축 & 매칭
 * Email: occidere@naver.com
-* Homepage: https://blog.naver.com/occidere
+* Github: https://github.com/occidere
+* Blog: https://occidere.blog.me/
+* Stackoverflow: https://stackoverflow.com/users/7110084/occidere
+* Leetcode: https://leetcode.com/occidere/
+* Baekjoon: https://www.acmicpc.net/user/occidere 
 ````
 
 ## 최인정
